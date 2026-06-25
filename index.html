@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>All Calculator Master | by Prince Chaudhary</title>
+<meta name="description" content="Free premium calculator - EMI, Percentage, Marks, Profit, Kisan, BMI, Age, Currency. By Prince Chaudhary.">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #6C47FF;
+  --primary-dark: #4F2FD4;
+  --primary-light: #EEE9FF;
+  --accent: #FF6B35;
+  --success: #10B981;
+  --warning: #F59E0B;
+  --danger: #EF4444;
+  --bg: #F3F4FB;
+  --card: #FFFFFF;
+  --text: #1A1A2E;
+  --muted: #6B7280;
+  --border: #E5E7EB;
+  --shadow: 0 4px 24px rgba(108,71,255,0.10);
+  --shadow-lg: 0 8px 40px rgba(108,71,255,0.18);
+  --radius: 18px;
+  --radius-sm: 12px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', sans-serif; background: var(--bg); min-height: 100vh; color: var(--text); }
+
+/* HEADER */
+header {
+  background: linear-gradient(135deg, #6C47FF 0%, #9B6DFF 50%, #FF6B35 100%);
+  padding: 28px 24px 24px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+header::before {
+  content: '';
+  position: absolute;
+  top: -40px; right: -40px;
+  width: 160px; height: 160px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 50%;
+}
+header::after {
+  content: '';
+  position: absolute;
+  bottom: -30px; left: -30px;
+  width: 120px; height: 120px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 50%;
+}
+.header-icon { font-size: 44px; margin-bottom: 8px; display: block; }
+header h1 { font-family: 'Poppins', sans-serif; font-size: 26px; font-weight: 800; color: white; letter-spacing: -0.5px; }
+header p { font-size: 13px; color: rgba(255,255,255,0.82); margin-top: 6px; font-weight: 500; }
+.header-badge { display: inline-block; background: rgba(255,255,255,0.18); color: white; font-size: 11px; font-weight: 600; padding: 3px 12px; border-radius: 20px; margin-top: 10px; letter-spacing: 0.5px; }
+
+/* NAV */
+.nav-wrap {
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+  white-space: nowrap;
+  padding: 12px 16px;
+  scrollbar-width: none;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.nav-wrap::-webkit-scrollbar { display: none; }
+.nav-wrap button {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 8px 18px;
+  border-radius: 30px;
+  border: 1.5px solid var(--border);
+  background: #F9FAFB;
+  color: var(--muted);
+  cursor: pointer;
+  margin-right: 8px;
+  transition: all 0.18s;
+  white-space: nowrap;
+  font-family: 'Inter', sans-serif;
+}
+.nav-wrap button.active {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+  box-shadow: 0 4px 14px rgba(108,71,255,0.3);
+}
+.nav-wrap button:hover:not(.active) { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
+
+/* CONTAINER */
+.container { max-width: 580px; margin: 24px auto; padding: 0 16px 60px; }
+
+/* CARD */
+.card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 28px;
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(108,71,255,0.07);
+}
+
+.section { display: none; }
+.section.active { display: block; }
+
+/* SECTION HEADER */
+.sec-header { margin-bottom: 22px; }
+.sec-title { font-family: 'Poppins', sans-serif; font-size: 20px; font-weight: 700; color: var(--text); }
+.sec-sub { font-size: 13px; color: var(--muted); margin-top: 3px; }
+
+/* FIELDS */
+.field { margin-bottom: 18px; }
+.field label {
+  display: block;
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 7px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+.field input, .field select {
+  width: 100%;
+  padding: 13px 16px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 16px;
+  color: var(--text);
+  background: #FAFAFA;
+  outline: none;
+  transition: all 0.18s;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+}
+.field input:focus, .field select:focus {
+  border-color: var(--primary);
+  background: white;
+  box-shadow: 0 0 0 4px rgba(108,71,255,0.10);
+}
+
+/* BUTTON */
+.btn {
+  width: 100%;
+  padding: 15px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 4px;
+  transition: all 0.18s;
+  font-family: 'Poppins', sans-serif;
+  letter-spacing: 0.3px;
+  box-shadow: 0 4px 18px rgba(108,71,255,0.35);
+}
+.btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(108,71,255,0.4); }
+.btn:active { transform: scale(0.98); }
+
+/* RESULT BOX */
+.result-box {
+  margin-top: 20px;
+  background: linear-gradient(135deg, #F5F0FF, #EEF2FF);
+  border-radius: var(--radius-sm);
+  padding: 20px;
+  display: none;
+  border: 1.5px solid #DDD6FF;
+  animation: fadeIn 0.3s ease;
+}
+@keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+.result-box.show { display: block; }
+.result-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 11px 0;
+  border-bottom: 1px solid rgba(108,71,255,0.10);
+  font-size: 15px;
+}
+.result-row:last-child {
+  border-bottom: none;
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--primary);
+  padding-top: 14px;
+}
+.result-row span:first-child { color: var(--muted); font-size: 13px; font-weight: 500; }
+
+/* GRID */
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+/* BASIC CALCULATOR */
+#disp {
+  width: 100%;
+  font-size: 36px;
+  text-align: right;
+  padding: 18px 20px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, #F9F7FF, #F3F4FB);
+  color: var(--text);
+  margin-bottom: 16px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  font-family: 'Poppins', sans-serif;
+}
+.calc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.calc-btn {
+  padding: 18px 8px;
+  font-size: 18px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--border);
+  background: white;
+  color: var(--text);
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.12s;
+  font-family: 'Poppins', sans-serif;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+.calc-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+.calc-btn:active { transform: scale(0.94); }
+.calc-btn.op { background: var(--primary-light); color: var(--primary); border-color: #D4C8FF; }
+.calc-btn.clear { background: #FFF0ED; color: var(--accent); border-color: #FFD5C8; }
+.calc-btn.eq { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; border-color: var(--primary); box-shadow: 0 4px 14px rgba(108,71,255,0.35); }
+.calc-btn.zero { grid-column: span 2; }
+
+/* CURRENCY */
+.swap-btn {
+  width: 100%;
+  background: var(--primary-light);
+  color: var(--primary);
+  border: 1.5px solid #D4C8FF;
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  margin: 10px 0;
+  transition: all 0.18s;
+  font-family: 'Inter', sans-serif;
+}
+.swap-btn:hover { background: var(--primary); color: white; }
+.currency-result {
+  text-align: center;
+  background: linear-gradient(135deg, var(--primary), #9B6DFF);
+  border-radius: var(--radius-sm);
+  padding: 28px 20px;
+  margin-top: 18px;
+  display: none;
+  animation: fadeIn 0.3s ease;
+  box-shadow: var(--shadow-lg);
+}
+.currency-result .amount { font-size: 22px; font-weight: 800; color: white; font-family: 'Poppins', sans-serif; line-height: 1.4; }
+.currency-result .rate-info { font-size: 13px; color: rgba(255,255,255,0.78); margin-top: 8px; }
+
+/* TIP BOX */
+.tip-box {
+  background: linear-gradient(135deg, #F0FDF4, #ECFDF5);
+  border: 1.5px solid #A7F3D0;
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  margin-top: 16px;
+  font-size: 13px;
+  color: #065F46;
+  font-weight: 500;
+}
+
+/* DIVIDER */
+.divider { height: 1px; background: var(--border); margin: 20px 0; }
+
+/* FOOTER */
+footer {
+  text-align: center;
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 28px;
+  padding: 20px;
+  background: white;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+footer strong { color: var(--primary); font-weight: 700; font-family: 'Poppins', sans-serif; }
+.footer-logo { font-size: 28px; margin-bottom: 6px; display: block; }
+</style>
+</head>
+<body>
+
+<header>
+  <span class="header-icon">🧮</span>
+  <h1>All Calculator Master</h1>
+  <p>EMI · Marks · Profit · Kisan · BMI · Age · Currency</p>
+  <span class="header-badge">✦ 9 Free Calculators ✦</span>
+</header>
+
+<div class="nav-wrap">
+  <button class="active" onclick="show('basic',this)">🔢 Basic</button>
+  <button onclick="show('currency',this)">💱 Currency</button>
+  <button onclick="show('emi',this)">🏦 EMI/Loan</button>
+  <button onclick="show('percent',this)">📊 Percentage</button>
+  <button onclick="show('marks',this)">🎓 Marks</button>
+  <button onclick="show('profit',this)">📈 Profit/Loss</button>
+  <button onclick="show('farmer',this)">🌾 Kisan</button>
+  <button onclick="show('bmi',this)">❤️ BMI</button>
+  <button onclick="show('age',this)">🎂 Age</button>
+</div>
+
+<div class="container">
+<div class="card">
+
+  <!-- BASIC -->
+  <div id="basic" class="section active">
+    <div class="sec-header">
+      <div class="sec-title">🔢 Basic Calculator</div>
+      <div class="sec-sub">For everyday calculations</div>
+    </div>
+    <input type="text" id="disp" readonly value="0">
+    <div class="calc-grid">
+      <button class="calc-btn clear" onclick="press('C')">C</button>
+      <button class="calc-btn op" onclick="press('back')">⌫</button>
+      <button class="calc-btn op" onclick="press('%')">%</button>
+      <button class="calc-btn op" onclick="press('/')">÷</button>
+      <button class="calc-btn" onclick="press('7')">7</button>
+      <button class="calc-btn" onclick="press('8')">8</button>
+      <button class="calc-btn" onclick="press('9')">9</button>
+      <button class="calc-btn op" onclick="press('*')">×</button>
+      <button class="calc-btn" onclick="press('4')">4</button>
+      <button class="calc-btn" onclick="press('5')">5</button>
+      <button class="calc-btn" onclick="press('6')">6</button>
+      <button class="calc-btn op" onclick="press('-')">−</button>
+      <button class="calc-btn" onclick="press('1')">1</button>
+      <button class="calc-btn" onclick="press('2')">2</button>
+      <button class="calc-btn" onclick="press('3')">3</button>
+      <button class="calc-btn op" onclick="press('+')">+</button>
+      <button class="calc-btn zero" onclick="press('0')">0</button>
+      <button class="calc-btn" onclick="press('.')">.</button>
+      <button class="calc-btn eq" onclick="press('=')">=</button>
+    </div>
+  </div>
+
+  <!-- CURRENCY -->
+  <div id="currency" class="section">
+    <div class="sec-header">
+      <div class="sec-title">💱 Currency Converter</div>
+      <div class="sec-sub">40+ currencies — Live rates</div>
+    </div>
+    <div class="field"><label>Amount</label><input id="camount" type="number" placeholder="e.g. 1000"></div>
+    <div class="grid2">
+      <div class="field"><label>From Currency</label><select id="cfrom"></select></div>
+      <div class="field"><label>To Currency</label><select id="cto"></select></div>
+    </div>
+    <button class="swap-btn" onclick="swapCurrency()">🔄 Swap Currencies</button>
+    <button class="btn" onclick="convertCurrency()">💱 Convert Now</button>
+    <div class="currency-result" id="curr-res">
+      <div class="amount" id="curr-amount"></div>
+      <div class="rate-info" id="curr-rate"></div>
+      <div class="rate-info" id="curr-time"></div>
+    </div>
+    <div class="tip-box">💡 Live exchange rates are used — internet connection required!</div>
+  </div>
+
+  <!-- EMI -->
+  <div id="emi" class="section">
+    <div class="sec-header">
+      <div class="sec-title">🏦 EMI / Loan Calculator</div>
+      <div class="sec-sub">Check before taking any loan</div>
+    </div>
+    <div class="field"><label>Loan Amount (₹)</label><input id="loan" type="number" placeholder="e.g. 5,00,000"></div>
+    <div class="grid2">
+      <div class="field"><label>Interest Rate (% / year)</label><input id="lrate" type="number" placeholder="e.g. 8.5"></div>
+      <div class="field"><label>Tenure (Months)</label><input id="tenure" type="number" placeholder="e.g. 60"></div>
+    </div>
+    <button class="btn" onclick="calcEMI()">🏦 Calculate EMI</button>
+    <div class="result-box" id="emi-res">
+      <div class="result-row"><span>Monthly EMI</span><span id="emi-val"></span></div>
+      <div class="result-row"><span>Total Payment</span><span id="emi-total"></span></div>
+      <div class="result-row"><span>Total Interest Paid</span><span id="emi-int"></span></div>
+    </div>
+    <div class="tip-box">💡 Always check before taking a bank loan!</div>
+  </div>
+
+  <!-- PERCENTAGE -->
+  <div id="percent" class="section">
+    <div class="sec-header">
+      <div class="sec-title">📊 Percentage Calculator</div>
+      <div class="sec-sub">For GST, discount, and everything else</div>
+    </div>
+    <div class="field"><label>Any Value</label><input id="pval" type="number" placeholder="e.g. 1500"></div>
+    <div class="field"><label>Percentage (%)</label><input id="ppct" type="number" placeholder="e.g. 18 (for GST)"></div>
+    <button class="btn" onclick="calcPct()">📊 Calculate</button>
+    <div class="result-box" id="pct-res">
+      <div class="result-row"><span>Only % Amount</span><span id="pct-val"></span></div>
+      <div class="result-row"><span>Value + % (Add GST)</span><span id="pct-add"></span></div>
+      <div class="result-row"><span>Value − % (Discount)</span><span id="pct-sub"></span></div>
+    </div>
+  </div>
+
+  <!-- MARKS -->
+  <div id="marks" class="section">
+    <div class="sec-header">
+      <div class="sec-title">🎓 Marks Calculator</div>
+      <div class="sec-sub">Get percentage and grade instantly</div>
+    </div>
+    <div class="field"><label>Marks Obtained</label><input id="mobt" type="number" placeholder="e.g. 450"></div>
+    <div class="field"><label>Total Maximum Marks</label><input id="mmax" type="number" placeholder="e.g. 600"></div>
+    <button class="btn" onclick="calcMarks()">🎓 Get Grade</button>
+    <div class="result-box" id="marks-res">
+      <div class="result-row"><span>Percentage</span><span id="marks-pct"></span></div>
+      <div class="result-row"><span>Grade</span><span id="marks-grade"></span></div>
+      <div class="result-row"><span>Result</span><span id="marks-status"></span></div>
+    </div>
+  </div>
+
+  <!-- PROFIT/LOSS -->
+  <div id="profit" class="section">
+    <div class="sec-header">
+      <div class="sec-title">📈 Profit / Loss Calculator</div>
+      <div class="sec-sub">Perfect for shop and business</div>
+    </div>
+    <div class="field"><label>Cost Price (₹)</label><input id="cp" type="number" placeholder="e.g. 1000"></div>
+    <div class="field"><label>Selling Price (₹)</label><input id="sp" type="number" placeholder="e.g. 1200"></div>
+    <button class="btn" onclick="calcProfit()">📈 Calculate</button>
+    <div class="result-box" id="profit-res">
+      <div class="result-row"><span>Status</span><span id="profit-status"></span></div>
+      <div class="result-row"><span>Amount</span><span id="profit-amt"></span></div>
+      <div class="result-row"><span>Percentage</span><span id="profit-pct"></span></div>
+    </div>
+  </div>
+
+  <!-- KISAN -->
+  <div id="farmer" class="section">
+    <div class="sec-header">
+      <div class="sec-title">🌾 Kisan Calculator</div>
+      <div class="sec-sub">Know your crop profit and income</div>
+    </div>
+    <div class="field"><label>Land Area (Bigha)</label><input id="area" type="number" placeholder="e.g. 3"></div>
+    <div class="field"><label>Yield per Bigha (kg)</label><input id="fyield" type="number" placeholder="e.g. 10"></div>
+    <div class="field"><label>Rate per kg (₹)</label><input id="fprice" type="number" placeholder="e.g. 25"></div>
+    <div class="field"><label>Total Cost (₹)</label><input id="farmcost" type="number" placeholder="e.g. 5000"></div>
+    <button class="btn" onclick="calcFarm()">🌾 Calculate Profit</button>
+    <div class="result-box" id="farm-res">
+      <div class="result-row"><span>Total Production</span><span id="farm-prod"></span></div>
+      <div class="result-row"><span>Total Income</span><span id="farm-income"></span></div>
+      <div class="result-row"><span>Net Profit</span><span id="farm-profit"></span></div>
+    </div>
+    <div class="tip-box">🌾 Calculate rate before going to market!</div>
+  </div>
+
+  <!-- BMI -->
+  <div id="bmi" class="section">
+    <div class="sec-header">
+      <div class="sec-title">❤️ BMI Calculator</div>
+      <div class="sec-sub">Know your health status — completely free</div>
+    </div>
+    <div class="grid2">
+      <div class="field"><label>Weight (kg)</label><input id="wt" type="number" placeholder="e.g. 65"></div>
+      <div class="field"><label>Height (cm)</label><input id="ht" type="number" placeholder="e.g. 170"></div>
+    </div>
+    <button class="btn" onclick="calcBMI()">❤️ Check BMI</button>
+    <div class="result-box" id="bmi-res">
+      <div class="result-row"><span>BMI Value</span><span id="bmi-val"></span></div>
+      <div class="result-row"><span>Category</span><span id="bmi-cat"></span></div>
+      <div class="result-row"><span>Ideal Weight Range</span><span id="bmi-ideal"></span></div>
+    </div>
+    <div class="tip-box">💪 18.5 – 24.9 = Normal / Healthy BMI</div>
+  </div>
+
+  <!-- AGE -->
+  <div id="age" class="section">
+    <div class="sec-header">
+      <div class="sec-title">🎂 Age Calculator</div>
+      <div class="sec-sub">Know your exact age — years, months, days</div>
+    </div>
+    <div class="field"><label>Date of Birth</label><input id="dob" type="date"></div>
+    <button class="btn" onclick="calcAge()">🎂 Umar Calculate</button>
+    <div class="result-box" id="age-res">
+      <div class="result-row"><span>Years</span><span id="age-yr"></span></div>
+      <div class="result-row"><span>Months</span><span id="age-mo"></span></div>
+      <div class="result-row"><span>Days</span><span id="age-dy"></span></div>
+      <div class="result-row"><span>Total Days (of your life)</span><span id="age-total"></span></div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <span class="footer-logo">🧮</span>
+  Made with ❤️ by <strong>Prince Chaudhary</strong><br>
+  <span style="font-size:12px;">All calculations are approximate · Free for everyone</span>
+</footer>
+</div>
+
+<script>
+const currencies = [
+  {code:'INR',name:'🇮🇳 Indian Rupee'},{code:'USD',name:'🇺🇸 US Dollar'},
+  {code:'EUR',name:'🇪🇺 Euro'},{code:'GBP',name:'🇬🇧 British Pound'},
+  {code:'AED',name:'🇦🇪 UAE Dirham'},{code:'SAR',name:'🇸🇦 Saudi Riyal'},
+  {code:'JPY',name:'🇯🇵 Japanese Yen'},{code:'CNY',name:'🇨🇳 Chinese Yuan'},
+  {code:'AUD',name:'🇦🇺 Australian Dollar'},{code:'CAD',name:'🇨🇦 Canadian Dollar'},
+  {code:'SGD',name:'🇸🇬 Singapore Dollar'},{code:'CHF',name:'🇨🇭 Swiss Franc'},
+  {code:'MYR',name:'🇲🇾 Malaysian Ringgit'},{code:'THB',name:'🇹🇭 Thai Baht'},
+  {code:'BDT',name:'🇧🇩 Bangladeshi Taka'},{code:'PKR',name:'🇵🇰 Pakistani Rupee'},
+  {code:'NPR',name:'🇳🇵 Nepali Rupee'},{code:'LKR',name:'🇱🇰 Sri Lankan Rupee'},
+  {code:'KWD',name:'🇰🇼 Kuwaiti Dinar'},{code:'QAR',name:'🇶🇦 Qatari Riyal'},
+  {code:'OMR',name:'🇴🇲 Omani Rial'},{code:'BHD',name:'🇧🇭 Bahraini Dinar'},
+  {code:'ZAR',name:'🇿🇦 South African Rand'},{code:'NZD',name:'🇳🇿 New Zealand Dollar'},
+  {code:'HKD',name:'🇭🇰 Hong Kong Dollar'},{code:'SEK',name:'🇸🇪 Swedish Krona'},
+  {code:'RUB',name:'🇷🇺 Russian Ruble'},{code:'TRY',name:'🇹🇷 Turkish Lira'},
+  {code:'MXN',name:'🇲🇽 Mexican Peso'},{code:'BRL',name:'🇧🇷 Brazilian Real'},
+  {code:'IDR',name:'🇮🇩 Indonesian Rupiah'},{code:'PHP',name:'🇵🇭 Philippine Peso'},
+  {code:'EGP',name:'🇪🇬 Egyptian Pound'},{code:'NGN',name:'🇳🇬 Nigerian Naira'},
+  {code:'KES',name:'🇰🇪 Kenyan Shilling'},{code:'MAD',name:'🇲🇦 Moroccan Dirham'},
+];
+
+window.onload = function() {
+  const f = document.getElementById('cfrom'), t = document.getElementById('cto');
+  currencies.forEach(c => {
+    f.innerHTML += `<option value="${c.code}">${c.name} (${c.code})</option>`;
+    t.innerHTML += `<option value="${c.code}">${c.name} (${c.code})</option>`;
+  });
+  f.value = 'INR'; t.value = 'USD';
+};
+
+function swapCurrency() {
+  const f = document.getElementById('cfrom'), t = document.getElementById('cto');
+  [f.value, t.value] = [t.value, f.value];
+}
+
+async function convertCurrency() {
+  const amount = +document.getElementById('camount').value;
+  const from = document.getElementById('cfrom').value;
+  const to = document.getElementById('cto').value;
+  if (!amount) { alert('Amount bharo!'); return; }
+  const btn = document.querySelector('#currency .btn');
+  btn.textContent = '⏳ Loading...'; btn.disabled = true;
+  try {
+    const res = await fetch(`https://api.exchangerate-api.com/v4/latest/${from}`);
+    const data = await res.json();
+    const rate = data.rates[to];
+    const result = (amount * rate).toFixed(4);
+    document.getElementById('curr-amount').textContent = `${amount} ${from} = ${result} ${to}`;
+    document.getElementById('curr-rate').textContent = `1 ${from} = ${rate.toFixed(6)} ${to}`;
+    document.getElementById('curr-time').textContent = `Last updated: ${new Date(data.time_last_updated*1000).toLocaleString('en-IN')}`;
+    document.getElementById('curr-res').style.display = 'block';
+  } catch(e) { alert('Internet check karo ya baad mein try karo!'); }
+  btn.textContent = '💱 Convert Now'; btn.disabled = false;
+}
+
+let expr = '';
+function press(v) {
+  const d = document.getElementById('disp');
+  if (v==='C') { expr=''; d.value='0'; return; }
+  if (v==='back') { expr=expr.slice(0,-1); d.value=expr||'0'; return; }
+  if (v==='=') {
+    try { let r=eval(expr); r=Math.round(r*1e10)/1e10; d.value=r; expr=String(r); }
+    catch { d.value='Error'; expr=''; }
+    return;
+  }
+  expr+=v; d.value=expr;
+}
+
+function show(id, btn) {
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-wrap button').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+function fmt(n) { return '₹'+Math.round(n).toLocaleString('en-IN'); }
+
+function calcEMI() {
+  let P=+document.getElementById('loan').value, r=+document.getElementById('lrate').value/12/100, n=+document.getElementById('tenure').value;
+  if(!P||!r||!n){alert('Saare fields bharo!');return;}
+  let emi=P*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1);
+  document.getElementById('emi-val').textContent=fmt(emi)+'/month';
+  document.getElementById('emi-total').textContent=fmt(emi*n);
+  document.getElementById('emi-int').textContent=fmt(emi*n-P);
+  document.getElementById('emi-res').classList.add('show');
+}
+
+function calcPct() {
+  let v=+document.getElementById('pval').value, p=+document.getElementById('ppct').value;
+  if(!v||!p){alert('Dono fields bharo!');return;}
+  let r=v*p/100;
+  document.getElementById('pct-val').textContent=r.toFixed(2);
+  document.getElementById('pct-add').textContent=(v+r).toFixed(2);
+  document.getElementById('pct-sub').textContent=(v-r).toFixed(2);
+  document.getElementById('pct-res').classList.add('show');
+}
+
+function calcMarks() {
+  let o=+document.getElementById('mobt').value, m=+document.getElementById('mmax').value;
+  if(!o||!m){alert('Dono fields bharo!');return;}
+  let p=(o/m)*100;
+  let g=p>=90?'A+ (Outstanding)':p>=80?'A (Excellent)':p>=70?'B+ (Very Good)':p>=60?'B (Good)':p>=50?'C (Average)':p>=33?'D (Pass)':'F (Fail)';
+  document.getElementById('marks-pct').textContent=p.toFixed(2)+'%';
+  document.getElementById('marks-grade').textContent=g;
+  document.getElementById('marks-status').textContent=p>=33?'✅ PASS':'❌ FAIL';
+  document.getElementById('marks-res').classList.add('show');
+}
+
+function calcProfit() {
+  let cp=+document.getElementById('cp').value, sp=+document.getElementById('sp').value;
+  if(!cp||!sp){alert('Dono fields bharo!');return;}
+  let diff=sp-cp, pct=(Math.abs(diff)/cp)*100;
+  document.getElementById('profit-status').textContent=diff>0?'📈 MUNAFA (Profit)':diff<0?'📉 NUKSAN (Loss)':'➡️ Break Even';
+  document.getElementById('profit-amt').textContent=fmt(Math.abs(diff));
+  document.getElementById('profit-pct').textContent=pct.toFixed(2)+'%';
+  document.getElementById('profit-res').classList.add('show');
+}
+
+function calcFarm() {
+  let a=+document.getElementById('area').value, y=+document.getElementById('fyield').value, p=+document.getElementById('fprice').value, c=+document.getElementById('farmcost').value||0;
+  if(!a||!y||!p){alert('Pehle teen fields bharo!');return;}
+  let prod=a*y, income=prod*p;
+  document.getElementById('farm-prod').textContent=Math.round(prod)+' kg';
+  document.getElementById('farm-income').textContent=fmt(income);
+  document.getElementById('farm-profit').textContent=fmt(income-c)+(income-c>=0?' 📈':' 📉');
+  document.getElementById('farm-res').classList.add('show');
+}
+
+function calcBMI() {
+  let w=+document.getElementById('wt').value, h=+document.getElementById('ht').value/100;
+  if(!w||!h){alert('Dono fields bharo!');return;}
+  let b=w/(h*h);
+  let c=b<18.5?'⚠️ Underweight':b<25?'✅ Normal / Healthy':b<30?'⚠️ Overweight':'❌ Obese';
+  document.getElementById('bmi-val').textContent=b.toFixed(1);
+  document.getElementById('bmi-cat').textContent=c;
+  document.getElementById('bmi-ideal').textContent=Math.round(18.5*h*h)+' – '+Math.round(24.9*h*h)+' kg';
+  document.getElementById('bmi-res').classList.add('show');
+}
+
+function calcAge() {
+  if(!document.getElementById('dob').value){alert('Date bharo!');return;}
+  let dob=new Date(document.getElementById('dob').value), now=new Date();
+  let y=now.getFullYear()-dob.getFullYear(), mo=now.getMonth()-dob.getMonth(), d=now.getDate()-dob.getDate();
+  if(d<0){mo--;d+=new Date(now.getFullYear(),now.getMonth(),0).getDate();}
+  if(mo<0){y--;mo+=12;}
+  let total=Math.floor((now-dob)/86400000);
+  document.getElementById('age-yr').textContent=y+' Years';
+  document.getElementById('age-mo').textContent=mo+' Months';
+  document.getElementById('age-dy').textContent=d+' Din';
+  document.getElementById('age-total').textContent=total.toLocaleString('en-IN')+' Din';
+  document.getElementById('age-res').classList.add('show');
+}
+</script>
+</body>
+</html>
