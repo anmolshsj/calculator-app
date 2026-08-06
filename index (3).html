@@ -1,0 +1,1478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>All Calculator Master</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Nunito:wght@800;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F0F4FF;--card:#fff;--bg2:#EEF2FF;--primary:#4F46E5;--p2:#7C3AED;--pl:#EEF2FF;--green:#10B981;--red:#EF4444;--orange:#F59E0B;--text:#1E1B4B;--muted:#6B7280;--border:#E0E7FF;}
+[data-theme=dark]{--bg:#0F0F1A;--card:#1E1E35;--bg2:#1A1A2E;--text:#F0F0FF;--muted:#8888AA;--border:rgba(120,80,255,0.2);--pl:rgba(79,70,229,0.15);}
+[data-theme=ocean]{--bg:#F0FDFF;--card:#fff;--bg2:#E0F7FA;--primary:#0891B2;--p2:#0E7490;--pl:#E0F7FA;--border:#B2EBF2;--text:#0C3547;}
+[data-theme=forest]{--bg:#F0FDF4;--card:#fff;--bg2:#DCFCE7;--primary:#16A34A;--p2:#15803D;--pl:#DCFCE7;--border:#BBF7D0;--text:#14532D;}
+[data-theme=sunset]{--bg:#FFF7F0;--card:#fff;--bg2:#FFE4D6;--primary:#EA580C;--p2:#DC2626;--pl:#FFE4D6;--border:#FED7AA;--text:#431407;}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+
+/* HEADER */
+.hdr{background:linear-gradient(135deg,var(--primary),var(--p2));padding:14px 16px 10px;position:sticky;top:0;z-index:999;box-shadow:0 4px 20px rgba(0,0,0,0.2);}
+.hdr-top{display:flex;align-items:center;justify-content:space-between;}
+.hdr-logo{display:flex;align-items:center;gap:10px;}
+.hdr-icon{width:36px;height:36px;background:rgba(255,255,255,0.2);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;}
+.hdr-name{font-family:'Nunito',sans-serif;font-size:15px;font-weight:900;color:white;}
+.hdr-sub{font-size:10px;color:rgba(255,255,255,0.7);}
+.hdr-btns{display:flex;gap:6px;}
+.hbtn{width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,0.15);border:none;color:white;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.clock{text-align:center;font-size:11px;color:rgba(255,255,255,0.65);padding:5px 0 0;}
+
+/* TABS */
+.big-tabs{display:grid;grid-template-columns:repeat(3,1fr);background:var(--card);border-bottom:2px solid var(--border);}
+.btab{padding:11px 4px;text-align:center;border:none;background:none;color:var(--muted);border-bottom:3px solid transparent;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s;}
+.btab.active{color:var(--primary);border-bottom-color:var(--primary);background:var(--pl);}
+.btab-ic{font-size:20px;display:block;}
+.btab-lb{font-size:11px;font-weight:700;display:block;margin-top:2px;}
+.sub-tabs{overflow-x:auto;white-space:nowrap;padding:8px 12px;background:var(--bg2);border-bottom:1px solid var(--border);display:none;scrollbar-width:none;}
+.sub-tabs::-webkit-scrollbar{display:none;}
+.sub-tabs.show{display:block;}
+.stab{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:600;padding:6px 12px;border-radius:20px;border:1.5px solid var(--border);background:var(--card);color:var(--muted);cursor:pointer;margin-right:6px;font-family:'Inter',sans-serif;transition:all 0.15s;}
+.stab.active{background:var(--primary);color:white;border-color:transparent;}
+
+/* PANELS */
+.panel{display:none;}
+.panel.show{display:block;}
+.sec{display:none;}
+.sec.show{display:block;}
+
+/* CONTAINER */
+.wrap{max-width:540px;margin:0 auto;padding:14px 12px 80px;}
+.card{background:var(--card);border-radius:16px;padding:18px;border:1.5px solid var(--border);box-shadow:0 2px 12px rgba(79,70,229,0.08);margin-bottom:12px;}
+
+/* SEC HDR */
+.shdr{display:flex;align-items:center;gap:10px;margin-bottom:14px;padding-bottom:12px;border-bottom:1.5px solid var(--border);}
+.sic{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+.stitle{font-family:'Nunito',sans-serif;font-size:15px;font-weight:900;color:var(--text);}
+.ssub{font-size:11px;color:var(--muted);margin-top:1px;}
+
+/* DISPLAY */
+.disp{background:linear-gradient(135deg,#1E1B4B,#312E81);border-radius:14px;padding:14px 16px;margin-bottom:12px;min-height:85px;display:flex;flex-direction:column;align-items:flex-end;justify-content:flex-end;position:relative;}
+.d-expr{font-size:12px;color:rgba(255,255,255,0.4);min-height:16px;text-align:right;}
+.d-val{font-family:'Nunito',sans-serif;font-size:36px;font-weight:900;color:white;text-align:right;word-break:break-all;line-height:1.1;}
+.d-copy{position:absolute;top:8px;right:8px;background:rgba(255,255,255,0.15);border:none;border-radius:6px;color:white;font-size:11px;padding:3px 8px;cursor:pointer;}
+
+/* CALC BUTTONS */
+.cgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+.cb{padding:15px 4px;font-size:17px;border-radius:11px;border:1.5px solid var(--border);background:var(--card);color:var(--text);cursor:pointer;font-weight:700;font-family:'Nunito',sans-serif;transition:transform 0.1s;box-shadow:0 2px 5px rgba(0,0,0,0.05);}
+.cb:active{transform:scale(0.92);}
+.op{background:var(--pl);color:var(--primary);border-color:rgba(79,70,229,0.2);}
+.clr{background:#FFF1F2;color:var(--red);border-color:#FECDD3;}
+.bck{background:#FFF7ED;color:var(--orange);border-color:#FED7AA;}
+.eq{background:linear-gradient(135deg,var(--primary),var(--p2));color:white;border-color:transparent;box-shadow:0 3px 12px rgba(79,70,229,0.35);}
+.z2{grid-column:span 2;}
+.fn{background:#F0FDF4;color:var(--green);border-color:#BBF7D0;font-size:12px;padding:12px 3px;}
+.fn2{background:#FFF7ED;color:var(--orange);border-color:#FED7AA;font-size:12px;padding:12px 3px;}
+.mem{background:#F5F3FF;color:var(--p2);border-color:#DDD6FE;font-size:12px;padding:12px 3px;}
+.sgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:7px;}
+
+/* FIELDS */
+.field{margin-bottom:12px;}
+.field label{display:block;font-size:11px;color:var(--muted);margin-bottom:5px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;}
+.field input,.field select{width:100%;padding:11px 13px;border:1.5px solid var(--border);border-radius:10px;font-size:15px;color:var(--text);background:var(--bg);outline:none;font-family:'Inter',sans-serif;font-weight:500;}
+.field input:focus,.field select:focus{border-color:var(--primary);background:var(--card);}
+.eg{font-size:11px;color:var(--muted);margin-top:3px;font-style:italic;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+
+/* BUTTONS */
+.btn{width:100%;padding:13px;background:linear-gradient(135deg,var(--primary),var(--p2));color:white;border:none;border-radius:11px;font-size:15px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;box-shadow:0 3px 12px rgba(79,70,229,0.3);margin-top:4px;}
+.btn:active{transform:scale(0.98);}
+.swapbtn{width:100%;background:var(--pl);color:var(--primary);border:1.5px solid rgba(79,70,229,0.2);border-radius:10px;padding:10px;font-size:13px;font-weight:700;cursor:pointer;margin:7px 0;font-family:'Inter',sans-serif;}
+
+/* RESULTS */
+.rbox{margin-top:12px;background:var(--bg2);border-radius:13px;padding:14px;display:none;border:1.5px solid var(--border);}
+.rbox.show{display:block;animation:pop 0.25s ease;}
+@keyframes pop{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.rrow{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--border);font-size:14px;font-weight:600;}
+.rrow:last-of-type{border:none;font-size:16px;font-weight:800;color:var(--primary);padding-top:10px;}
+.rrow span:first-child{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:0.4px;}
+.ract{display:flex;gap:7px;margin-top:10px;}
+.rbtn{flex:1;padding:7px;border-radius:8px;border:1.5px solid var(--border);background:var(--card);color:var(--text);font-size:12px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;}
+
+/* CURRENCY RESULT */
+.cres{text-align:center;background:linear-gradient(135deg,var(--primary),var(--p2));border-radius:13px;padding:18px;margin-top:12px;display:none;box-shadow:0 5px 18px rgba(79,70,229,0.25);}
+.camt{font-family:'Nunito',sans-serif;font-size:18px;font-weight:900;color:white;}
+.crate{font-size:12px;color:rgba(255,255,255,0.7);margin-top:4px;}
+
+/* SCI RESULT */
+.sres{background:var(--bg2);border:1.5px solid var(--border);border-radius:12px;padding:14px;margin-top:10px;display:none;text-align:center;}
+.sres.show{display:block;animation:pop 0.25s ease;}
+.sval{font-family:'Nunito',sans-serif;font-size:22px;font-weight:900;color:var(--primary);}
+.slabel{font-size:12px;color:var(--muted);margin-top:3px;}
+
+/* TIP */
+.tip{background:#F0FDF4;border:1.5px solid #BBF7D0;border-radius:10px;padding:9px 12px;margin-top:10px;font-size:12px;color:#065F46;font-weight:500;}
+
+/* BMI BAR */
+.bmibar{height:8px;border-radius:4px;background:linear-gradient(to right,#3B82F6,#10B981,#F59E0B,#EF4444);margin:8px 0;}
+.bmiind{width:14px;height:14px;border-radius:50%;background:white;border:3px solid var(--primary);margin-top:-11px;transition:margin-left 0.5s;}
+
+/* AI */
+.aichat{display:flex;flex-direction:column;gap:8px;max-height:380px;overflow-y:auto;margin-bottom:10px;padding:2px;}
+.aimsg{padding:10px 13px;border-radius:12px;font-size:13px;line-height:1.5;animation:pop 0.2s ease;}
+.aimsg.u{background:linear-gradient(135deg,var(--primary),var(--p2));color:white;align-self:flex-end;max-width:85%;border-radius:12px 12px 3px 12px;}
+.aimsg.b{background:var(--bg2);color:var(--text);border:1.5px solid var(--border);border-radius:12px 12px 12px 3px;max-width:92%;}
+.airow{display:flex;gap:7px;}
+.airow input{flex:1;padding:11px 13px;border:1.5px solid var(--border);border-radius:11px;font-size:14px;background:var(--bg);color:var(--text);outline:none;font-family:'Inter',sans-serif;}
+.airow input:focus{border-color:var(--primary);}
+.aisend{padding:11px 14px;background:linear-gradient(135deg,var(--primary),var(--p2));color:white;border:none;border-radius:11px;font-size:16px;cursor:pointer;}
+.aisugs{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px;}
+.aisug{padding:5px 9px;background:var(--pl);color:var(--primary);border:1.5px solid rgba(79,70,229,0.2);border-radius:16px;font-size:11px;font-weight:600;cursor:pointer;}
+
+/* HISTORY */
+.hitem{padding:10px 12px;border-radius:10px;background:var(--bg2);margin-bottom:7px;border:1.5px solid var(--border);display:flex;align-items:center;gap:10px;animation:pop 0.2s ease;}
+.hexpr{font-size:12px;color:var(--muted);}
+.hval{font-size:15px;font-weight:700;color:var(--primary);}
+.htime{font-size:10px;color:var(--muted);margin-top:1px;}
+.hdel{margin-left:auto;background:none;border:none;color:var(--red);font-size:15px;cursor:pointer;}
+.hsearch{width:100%;padding:9px 13px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;background:var(--bg);color:var(--text);outline:none;margin-bottom:10px;font-family:'Inter',sans-serif;}
+
+/* FAVS */
+.favgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;}
+.favcard{padding:14px;background:var(--bg2);border-radius:12px;border:1.5px solid var(--border);cursor:pointer;text-align:center;transition:all 0.15s;}
+.favcard:active{transform:scale(0.97);}
+.favic{font-size:22px;margin-bottom:5px;}
+.favname{font-size:12px;font-weight:700;color:var(--text);}
+.favbtn{margin-left:auto;background:none;border:none;font-size:17px;cursor:pointer;}
+
+/* SETTINGS */
+.srow{display:flex;align-items:center;justify-content:space-between;padding:13px 0;border-bottom:1px solid var(--border);}
+.srow:last-child{border:none;}
+.slbl{font-size:14px;font-weight:600;color:var(--text);}
+.ssmall{font-size:11px;color:var(--muted);margin-top:1px;}
+.tog{width:42px;height:22px;border-radius:11px;background:var(--border);border:none;cursor:pointer;position:relative;transition:background 0.3s;flex-shrink:0;}
+.tog::after{content:'';position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:white;transition:transform 0.3s;box-shadow:0 1px 3px rgba(0,0,0,0.2);}
+.tog.on{background:var(--green);}
+.tog.on::after{transform:translateX(20px);}
+.tgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:8px 0 14px;}
+.tdot{border-radius:10px;height:36px;cursor:pointer;border:3px solid transparent;transition:all 0.2s;}
+.tdot.active{border-color:var(--primary);}
+
+/* BOTTOM NAV */
+.bnav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1.5px solid var(--border);display:flex;z-index:100;box-shadow:0 -3px 12px rgba(0,0,0,0.07);}
+.nbtn{flex:1;padding:9px 3px;border:none;background:none;display:flex;flex-direction:column;align-items:center;gap:2px;color:var(--muted);cursor:pointer;font-family:'Inter',sans-serif;}
+.nbtn.active{color:var(--primary);}
+.nic{font-size:19px;}
+.nlb{font-size:10px;font-weight:600;}
+
+/* TOAST */
+.toast{position:fixed;bottom:70px;left:50%;transform:translateX(-50%) translateY(60px);background:#1E1B4B;color:white;padding:9px 18px;border-radius:18px;font-size:13px;font-weight:600;z-index:9999;transition:transform 0.3s;opacity:0;pointer-events:none;}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
+
+/* CONSTANTS TABLE */
+.ctable .rrow:last-of-type{font-size:13px;font-weight:700;}
+</style>
+</head>
+<body data-theme="default">
+
+<!-- HEADER -->
+<div class="hdr">
+  <div class="hdr-top">
+    <div class="hdr-logo">
+      <div class="hdr-icon">🧮</div>
+      <div>
+        <div class="hdr-name">All Calculator Master</div>
+        <div class="hdr-sub">Premium Calculator Suite</div>
+      </div>
+    </div>
+    <div class="hdr-btns">
+      <button class="hbtn" onclick="openTheme()">🎨</button>
+      <button class="hbtn" id="dkbtn" onclick="toggleDark()">🌙</button>
+      <button class="hbtn" onclick="goPage('settings')">⚙️</button>
+    </div>
+  </div>
+  <div class="clock" id="clk"></div>
+</div>
+
+<!-- BIG TABS -->
+<div class="big-tabs" id="bigtabs">
+  <button class="btab active" id="bt-basic" onclick="switchTab('basic')">
+    <span class="btab-ic">🔢</span><span class="btab-lb">Basic</span>
+  </button>
+  <button class="btab" id="bt-sci" onclick="switchTab('sci')">
+    <span class="btab-ic">🔬</span><span class="btab-lb">Scientific</span>
+  </button>
+  <button class="btab" id="bt-ai" onclick="switchTab('ai')">
+    <span class="btab-ic">🤖</span><span class="btab-lb">AI Assist</span>
+  </button>
+</div>
+
+<!-- BASIC SUB TABS -->
+<div class="sub-tabs show" id="st-basic">
+  <button class="stab active" onclick="switchSec('basic','s-calc',this)">🔢 Calculator</button>
+  <button class="stab" onclick="switchSec('basic','s-curr',this)">💱 Currency</button>
+  <button class="stab" onclick="switchSec('basic','s-emi',this)">🏦 EMI</button>
+  <button class="stab" onclick="switchSec('basic','s-pct',this)">📊 Percentage</button>
+  <button class="stab" onclick="switchSec('basic','s-marks',this)">🎓 Marks</button>
+  <button class="stab" onclick="switchSec('basic','s-profit',this)">📈 Profit</button>
+  <button class="stab" onclick="switchSec('basic','s-kisan',this)">🌾 Kisan</button>
+  <button class="stab" onclick="switchSec('basic','s-bmi',this)">❤️ BMI</button>
+  <button class="stab" onclick="switchSec('basic','s-age',this)">🎂 Age</button>
+</div>
+
+<!-- SCI SUB TABS -->
+<div class="sub-tabs" id="st-sci">
+  <button class="stab active" onclick="switchSec('sci','sc-calc',this)">🔢 Calculator</button>
+  <button class="stab" onclick="switchSec('sci','sc-trig',this)">📐 Trig</button>
+  <button class="stab" onclick="switchSec('sci','sc-log',this)">📊 Log & Power</button>
+  <button class="stab" onclick="switchSec('sci','sc-unit',this)">🔄 Units</button>
+  <button class="stab" onclick="switchSec('sci','sc-const',this)">🌐 Constants</button>
+</div>
+
+<div class="wrap">
+
+<!-- ======== BASIC PANEL ======== -->
+<div class="panel show" id="p-basic">
+<div class="card">
+
+<!-- BASIC CALC -->
+<div class="sec show" id="s-calc">
+  <div class="shdr">
+    <div class="sic" style="background:#EEF2FF">🔢</div>
+    <div><div class="stitle">Basic Calculator</div><div class="ssub">Everyday arithmetic</div></div>
+    <button class="favbtn" id="fb-s-calc" onclick="togFav('s-calc','🔢 Calculator')">🤍</button>
+  </div>
+  <div class="disp">
+    <div class="d-expr" id="bexpr"></div>
+    <div class="d-val" id="bval">0</div>
+    <button class="d-copy" onclick="cp('bval')">Copy</button>
+  </div>
+  <div class="cgrid">
+    <button class="cb clr" onclick="B('C')">C</button>
+    <button class="cb bck" onclick="B('back')">⌫</button>
+    <button class="cb op" onclick="B('%')">%</button>
+    <button class="cb op" onclick="B('/')">÷</button>
+    <button class="cb" onclick="B('7')">7</button>
+    <button class="cb" onclick="B('8')">8</button>
+    <button class="cb" onclick="B('9')">9</button>
+    <button class="cb op" onclick="B('*')">×</button>
+    <button class="cb" onclick="B('4')">4</button>
+    <button class="cb" onclick="B('5')">5</button>
+    <button class="cb" onclick="B('6')">6</button>
+    <button class="cb op" onclick="B('-')">−</button>
+    <button class="cb" onclick="B('1')">1</button>
+    <button class="cb" onclick="B('2')">2</button>
+    <button class="cb" onclick="B('3')">3</button>
+    <button class="cb op" onclick="B('+')">+</button>
+    <button class="cb z2" onclick="B('0')">0</button>
+    <button class="cb" onclick="B('.')">.</button>
+    <button class="cb eq" onclick="B('=')">=</button>
+  </div>
+</div>
+
+<!-- CURRENCY -->
+<div class="sec" id="s-curr">
+  <div class="shdr">
+    <div class="sic" style="background:#FFF7ED">💱</div>
+    <div><div class="stitle">Currency Converter</div><div class="ssub">40+ currencies · Live rates</div></div>
+    <button class="favbtn" id="fb-s-curr" onclick="togFav('s-curr','💱 Currency')">🤍</button>
+  </div>
+  <div class="field"><label>Amount</label><input id="camount" type="number" placeholder="e.g. 1000"></div>
+  <div class="g2">
+    <div class="field"><label>From</label><select id="cfrom">
+    <option value="INR">India - Indian Rupee (INR)</option>
+    <option value="USD">USA - US Dollar (USD)</option>
+    <option value="EUR">Europe - Euro (EUR)</option>
+    <option value="GBP">UK - British Pound (GBP)</option>
+    <option value="AED">UAE - Dirham (AED)</option>
+    <option value="SAR">Saudi Arabia - Riyal (SAR)</option>
+    <option value="KWD">Kuwait - Kuwaiti Dinar (KWD)</option>
+    <option value="QAR">Qatar - Qatari Riyal (QAR)</option>
+    <option value="OMR">Oman - Omani Rial (OMR)</option>
+    <option value="BHD">Bahrain - Bahraini Dinar (BHD)</option>
+    <option value="JPY">Japan - Japanese Yen (JPY)</option>
+    <option value="CNY">China - Chinese Yuan (CNY)</option>
+    <option value="KRW">South Korea - Korean Won (KRW)</option>
+    <option value="AUD">Australia - Australian Dollar (AUD)</option>
+    <option value="CAD">Canada - Canadian Dollar (CAD)</option>
+    <option value="SGD">Singapore - Singapore Dollar (SGD)</option>
+    <option value="CHF">Switzerland - Swiss Franc (CHF)</option>
+    <option value="HKD">Hong Kong - HK Dollar (HKD)</option>
+    <option value="NZD">New Zealand - NZ Dollar (NZD)</option>
+    <option value="NPR">Nepal - Nepali Rupee (NPR)</option>
+    <option value="PKR">Pakistan - Pakistani Rupee (PKR)</option>
+    <option value="BDT">Bangladesh - Bangladeshi Taka (BDT)</option>
+    <option value="LKR">Sri Lanka - Sri Lankan Rupee (LKR)</option>
+    <option value="MYR">Malaysia - Malaysian Ringgit (MYR)</option>
+    <option value="THB">Thailand - Thai Baht (THB)</option>
+    <option value="IDR">Indonesia - Indonesian Rupiah (IDR)</option>
+    <option value="PHP">Philippines - Philippine Peso (PHP)</option>
+    <option value="VND">Vietnam - Vietnamese Dong (VND)</option>
+    <option value="TWD">Taiwan - Taiwan Dollar (TWD)</option>
+    <option value="MMK">Myanmar - Myanmar Kyat (MMK)</option>
+    <option value="MVR">Maldives - Maldivian Rufiyaa (MVR)</option>
+    <option value="AFN">Afghanistan - Afghan Afghani (AFN)</option>
+    <option value="MUR">Mauritius - Mauritian Rupee (MUR)</option>
+    <option value="ZAR">South Africa - South African Rand (ZAR)</option>
+    <option value="NGN">Nigeria - Nigerian Naira (NGN)</option>
+    <option value="KES">Kenya - Kenyan Shilling (KES)</option>
+    <option value="GHS">Ghana - Ghanaian Cedi (GHS)</option>
+    <option value="EGP">Egypt - Egyptian Pound (EGP)</option>
+    <option value="MAD">Morocco - Moroccan Dirham (MAD)</option>
+    <option value="ETB">Ethiopia - Ethiopian Birr (ETB)</option>
+    <option value="RUB">Russia - Russian Ruble (RUB)</option>
+    <option value="TRY">Turkey - Turkish Lira (TRY)</option>
+    <option value="BRL">Brazil - Brazilian Real (BRL)</option>
+    <option value="MXN">Mexico - Mexican Peso (MXN)</option>
+    <option value="ARS">Argentina - Argentine Peso (ARS)</option>
+    <option value="SEK">Sweden - Swedish Krona (SEK)</option>
+    <option value="NOK">Norway - Norwegian Krone (NOK)</option>
+    <option value="DKK">Denmark - Danish Krone (DKK)</option>
+    <option value="PLN">Poland - Polish Zloty (PLN)</option>
+    <option value="ILS">Israel - Israeli Shekel (ILS)</option>
+    <option value="JOD">Jordan - Jordanian Dinar (JOD)</option>
+    <option value="CLP">Chile - Chilean Peso (CLP)</option>
+    <option value="COP">Colombia - Colombian Peso (COP)</option>
+  </select></div>
+    <div class="field"><label>To</label><select id="cto">
+    <option value="INR">India - Indian Rupee (INR)</option>
+    <option value="USD">USA - US Dollar (USD)</option>
+    <option value="EUR">Europe - Euro (EUR)</option>
+    <option value="GBP">UK - British Pound (GBP)</option>
+    <option value="AED">UAE - Dirham (AED)</option>
+    <option value="SAR">Saudi Arabia - Riyal (SAR)</option>
+    <option value="KWD">Kuwait - Kuwaiti Dinar (KWD)</option>
+    <option value="QAR">Qatar - Qatari Riyal (QAR)</option>
+    <option value="OMR">Oman - Omani Rial (OMR)</option>
+    <option value="BHD">Bahrain - Bahraini Dinar (BHD)</option>
+    <option value="JPY">Japan - Japanese Yen (JPY)</option>
+    <option value="CNY">China - Chinese Yuan (CNY)</option>
+    <option value="KRW">South Korea - Korean Won (KRW)</option>
+    <option value="AUD">Australia - Australian Dollar (AUD)</option>
+    <option value="CAD">Canada - Canadian Dollar (CAD)</option>
+    <option value="SGD">Singapore - Singapore Dollar (SGD)</option>
+    <option value="CHF">Switzerland - Swiss Franc (CHF)</option>
+    <option value="HKD">Hong Kong - HK Dollar (HKD)</option>
+    <option value="NZD">New Zealand - NZ Dollar (NZD)</option>
+    <option value="NPR">Nepal - Nepali Rupee (NPR)</option>
+    <option value="PKR">Pakistan - Pakistani Rupee (PKR)</option>
+    <option value="BDT">Bangladesh - Bangladeshi Taka (BDT)</option>
+    <option value="LKR">Sri Lanka - Sri Lankan Rupee (LKR)</option>
+    <option value="MYR">Malaysia - Malaysian Ringgit (MYR)</option>
+    <option value="THB">Thailand - Thai Baht (THB)</option>
+    <option value="IDR">Indonesia - Indonesian Rupiah (IDR)</option>
+    <option value="PHP">Philippines - Philippine Peso (PHP)</option>
+    <option value="VND">Vietnam - Vietnamese Dong (VND)</option>
+    <option value="TWD">Taiwan - Taiwan Dollar (TWD)</option>
+    <option value="MMK">Myanmar - Myanmar Kyat (MMK)</option>
+    <option value="MVR">Maldives - Maldivian Rufiyaa (MVR)</option>
+    <option value="AFN">Afghanistan - Afghan Afghani (AFN)</option>
+    <option value="MUR">Mauritius - Mauritian Rupee (MUR)</option>
+    <option value="ZAR">South Africa - South African Rand (ZAR)</option>
+    <option value="NGN">Nigeria - Nigerian Naira (NGN)</option>
+    <option value="KES">Kenya - Kenyan Shilling (KES)</option>
+    <option value="GHS">Ghana - Ghanaian Cedi (GHS)</option>
+    <option value="EGP">Egypt - Egyptian Pound (EGP)</option>
+    <option value="MAD">Morocco - Moroccan Dirham (MAD)</option>
+    <option value="ETB">Ethiopia - Ethiopian Birr (ETB)</option>
+    <option value="RUB">Russia - Russian Ruble (RUB)</option>
+    <option value="TRY">Turkey - Turkish Lira (TRY)</option>
+    <option value="BRL">Brazil - Brazilian Real (BRL)</option>
+    <option value="MXN">Mexico - Mexican Peso (MXN)</option>
+    <option value="ARS">Argentina - Argentine Peso (ARS)</option>
+    <option value="SEK">Sweden - Swedish Krona (SEK)</option>
+    <option value="NOK">Norway - Norwegian Krone (NOK)</option>
+    <option value="DKK">Denmark - Danish Krone (DKK)</option>
+    <option value="PLN">Poland - Polish Zloty (PLN)</option>
+    <option value="ILS">Israel - Israeli Shekel (ILS)</option>
+    <option value="JOD">Jordan - Jordanian Dinar (JOD)</option>
+    <option value="CLP">Chile - Chilean Peso (CLP)</option>
+    <option value="COP">Colombia - Colombian Peso (COP)</option>
+  </select></div>
+  </div>
+  <button class="swapbtn" onclick="swapCurr()">🔄 Swap Currencies</button>
+  <button class="btn" onclick="convCurr()">💱 Convert Now</button>
+  <div class="cres" id="cres">
+    <div class="camt" id="camt"></div>
+    <div class="crate" id="crate"></div>
+    <div class="crate" id="ctime"></div>
+  </div>
+  <div class="tip">💡 Live rates used. Offline: cached rate shown.</div>
+</div>
+
+<!-- EMI -->
+<div class="sec" id="s-emi">
+  <div class="shdr">
+    <div class="sic" style="background:#EFF6FF">🏦</div>
+    <div><div class="stitle">EMI / Loan Calculator</div><div class="ssub">Check before taking any loan</div></div>
+    <button class="favbtn" id="fb-s-emi" onclick="togFav('s-emi','🏦 EMI')">🤍</button>
+  </div>
+  <div class="field"><label>Loan Amount (₹)</label><input id="eloan" type="number" placeholder="e.g. 500000"></div>
+  <div class="g2">
+    <div class="field"><label>Interest Rate (%/yr)</label><input id="erate" type="number" placeholder="e.g. 8.5"></div>
+    <div class="field"><label>Tenure (Months)</label><input id="eten" type="number" placeholder="e.g. 60"></div>
+  </div>
+  <button class="btn" onclick="calcEMI()">🏦 Calculate EMI</button>
+  <div class="rbox" id="eres">
+    <div class="rrow"><span>Monthly EMI</span><span id="eval"></span></div>
+    <div class="rrow"><span>Principal</span><span id="eprin"></span></div>
+    <div class="rrow"><span>Total Interest</span><span id="eint"></span></div>
+    <div class="rrow"><span>Total Payment</span><span id="etot"></span></div>
+    <div class="ract">
+      <button class="rbtn" onclick="cpRes('eres')">📋 Copy</button>
+      <button class="rbtn" onclick="shareRes('EMI')">📤 Share</button>
+    </div>
+  </div>
+</div>
+
+<!-- PERCENTAGE -->
+<div class="sec" id="s-pct">
+  <div class="shdr">
+    <div class="sic" style="background:#FFF7ED">📊</div>
+    <div><div class="stitle">Percentage Calculator</div><div class="ssub">GST, discount, increase, decrease</div></div>
+    <button class="favbtn" id="fb-s-pct" onclick="togFav('s-pct','📊 Percentage')">🤍</button>
+  </div>
+  <div class="field"><label>Value</label><input id="pval" type="number" placeholder="e.g. 1500"></div>
+  <div class="field"><label>Percentage (%)</label><input id="ppct" type="number" placeholder="e.g. 18 for GST"></div>
+  <button class="btn" onclick="calcPct()">📊 Calculate</button>
+  <div class="rbox" id="pres">
+    <div class="rrow"><span>% Amount</span><span id="pamt"></span></div>
+    <div class="rrow"><span>After Increase</span><span id="pinc"></span></div>
+    <div class="rrow"><span>After Discount</span><span id="pdec"></span></div>
+    <div class="ract">
+      <button class="rbtn" onclick="cpRes('pres')">📋 Copy</button>
+      <button class="rbtn" onclick="shareRes('Percentage')">📤 Share</button>
+    </div>
+  </div>
+</div>
+
+<!-- MARKS -->
+<div class="sec" id="s-marks">
+  <div class="shdr">
+    <div class="sic" style="background:#F5F3FF">🎓</div>
+    <div><div class="stitle">Marks Calculator</div><div class="ssub">Percentage, grade, pass/fail</div></div>
+    <button class="favbtn" id="fb-s-marks" onclick="togFav('s-marks','🎓 Marks')">🤍</button>
+  </div>
+  <div class="field"><label>Marks Obtained</label><input id="mobt" type="number" placeholder="e.g. 450"></div>
+  <div class="field"><label>Total Maximum Marks</label><input id="mmax" type="number" placeholder="e.g. 600"></div>
+  <button class="btn" onclick="calcMarks()">🎓 Get Grade</button>
+  <div class="rbox" id="mres">
+    <div class="rrow"><span>Percentage</span><span id="mpct"></span></div>
+    <div class="rrow"><span>Grade</span><span id="mgrade"></span></div>
+    <div class="rrow"><span>Result</span><span id="mstat"></span></div>
+    <div class="ract">
+      <button class="rbtn" onclick="cpRes('mres')">📋 Copy</button>
+      <button class="rbtn" onclick="shareRes('Marks')">📤 Share</button>
+    </div>
+  </div>
+</div>
+
+<!-- PROFIT -->
+<div class="sec" id="s-profit">
+  <div class="shdr">
+    <div class="sic" style="background:#F0FDF4">📈</div>
+    <div><div class="stitle">Profit / Loss Calculator</div><div class="ssub">Shop, business, trading</div></div>
+    <button class="favbtn" id="fb-s-profit" onclick="togFav('s-profit','📈 Profit/Loss')">🤍</button>
+  </div>
+  <div class="field"><label>Cost Price (₹)</label><input id="pcp" type="number" placeholder="e.g. 1000"><div class="eg">💡 Price at which you bought</div></div>
+  <div class="field"><label>Selling Price (₹)</label><input id="psp" type="number" placeholder="e.g. 1200"></div>
+  <button class="btn" onclick="calcProfit()">📈 Calculate</button>
+  <div class="rbox" id="prres">
+    <div class="rrow"><span>Status</span><span id="prstat"></span></div>
+    <div class="rrow"><span>Amount</span><span id="pramt"></span></div>
+    <div class="rrow"><span>Percentage</span><span id="prpct"></span></div>
+    <div class="ract">
+      <button class="rbtn" onclick="cpRes('prres')">📋 Copy</button>
+      <button class="rbtn" onclick="shareRes('Profit/Loss')">📤 Share</button>
+    </div>
+  </div>
+</div>
+
+<!-- KISAN -->
+<div class="sec" id="s-kisan">
+  <div class="shdr">
+    <div class="sic" style="background:#F0FDF4">🌾</div>
+    <div><div class="stitle">Kisan Calculator</div><div class="ssub">Crop profit and income</div></div>
+    <button class="favbtn" id="fb-s-kisan" onclick="togFav('s-kisan','🌾 Kisan')">🤍</button>
+  </div>
+  <div class="field"><label>Land Area (Bigha)</label><input id="karea" type="number" placeholder="e.g. 3"></div>
+  <div class="field"><label>Yield per Bigha (kg)</label><input id="kyield" type="number" placeholder="e.g. 10"></div>
+  <div class="field"><label>Rate per kg (₹)</label><input id="krate" type="number" placeholder="e.g. 25"></div>
+  <div class="field"><label>Total Cost (₹)</label><input id="kcost" type="number" placeholder="e.g. 5000"></div>
+  <button class="btn" onclick="calcKisan()">🌾 Calculate Profit</button>
+  <div class="rbox" id="kres">
+    <div class="rrow"><span>Total Production</span><span id="kprod"></span></div>
+    <div class="rrow"><span>Total Income</span><span id="kinc"></span></div>
+    <div class="rrow"><span>Net Profit</span><span id="kprofit"></span></div>
+    <div class="ract">
+      <button class="rbtn" onclick="cpRes('kres')">📋 Copy</button>
+      <button class="rbtn" onclick="shareRes('Kisan')">📤 Share</button>
+    </div>
+  </div>
+</div>
+
+<!-- BMI -->
+<div class="sec" id="s-bmi">
+  <div class="shdr">
+    <div class="sic" style="background:#FFF1F2">❤️</div>
+    <div><div class="stitle">BMI Calculator</div><div class="ssub">Health status with color indicator</div></div>
+    <button class="favbtn" id="fb-s-bmi" onclick="togFav('s-bmi','❤️ BMI')">🤍</button>
+  </div>
+  <div class="g2">
+    <div class="field"><label>Weight (kg)</label><input id="bwt" type="number" placeholder="e.g. 65"></div>
+    <div class="field"><label>Height (cm)</label><input id="bht" type="number" placeholder="e.g. 170"></div>
+  </div>
+  <button class="btn" onclick="calcBMI()">❤️ Check BMI</button>
+  <div class="rbox" id="bres">
+    <div class="rrow"><span>BMI Value</span><span id="bval2"></span></div>
+    <div class="rrow"><span>Category</span><span id="bcat"></span></div>
+    <div class="rrow"><span>Ideal Weight</span><span id="bideal"></span></div>
+    <div class="bmibar" id="bbar" style="display:none"><div class="bmiind" id="bind"></div></div>
+    <div id="btip" style="margin-top:8px;font-size:12px;color:var(--muted);display:none"></div>
+    <div class="ract"><button class="rbtn" onclick="cpRes('bres')">📋 Copy</button></div>
+  </div>
+  <div class="tip">💪 18.5–24.9 = Normal/Healthy BMI</div>
+</div>
+
+<!-- AGE -->
+<div class="sec" id="s-age">
+  <div class="shdr">
+    <div class="sic" style="background:#FFF7ED">🎂</div>
+    <div><div class="stitle">Age Calculator</div><div class="ssub">Years, weeks, hours, next birthday</div></div>
+    <button class="favbtn" id="fb-s-age" onclick="togFav('s-age','🎂 Age')">🤍</button>
+  </div>
+  <div class="field"><label>Date of Birth</label><input id="adob" type="date"><div class="eg">💡 Next birthday countdown included!</div></div>
+  <button class="btn" onclick="calcAge()">🎂 Calculate Age</button>
+  <div class="rbox" id="ageres">
+    <div class="rrow"><span>Age</span><span id="aage"></span></div>
+    <div class="rrow"><span>Total Months</span><span id="amo"></span></div>
+    <div class="rrow"><span>Total Weeks</span><span id="awk"></span></div>
+    <div class="rrow"><span>Total Days</span><span id="ady"></span></div>
+    <div class="rrow"><span>Total Hours</span><span id="ahr"></span></div>
+    <div class="rrow"><span>Next Birthday</span><span id="abday"></span></div>
+    <div class="ract">
+      <button class="rbtn" onclick="cpRes('ageres')">📋 Copy</button>
+      <button class="rbtn" onclick="shareRes('Age')">📤 Share</button>
+    </div>
+  </div>
+</div>
+
+</div><!-- card -->
+</div><!-- p-basic -->
+
+<!-- ======== SCIENTIFIC PANEL ======== -->
+<div class="panel" id="p-sci">
+<div class="card">
+
+<!-- SCI CALCULATOR -->
+<div class="sec show" id="sc-calc">
+  <div class="shdr">
+    <div class="sic" style="background:#EEF2FF">🔬</div>
+    <div><div class="stitle">Scientific Calculator</div><div class="ssub">Memory · Advanced functions</div></div>
+  </div>
+  <div class="disp">
+    <div class="d-expr" id="sexpr"></div>
+    <div class="d-val" id="sval">0</div>
+    <button class="d-copy" onclick="cp('sval')">Copy</button>
+  </div>
+  <div class="sgrid">
+    <button class="cb mem" onclick="SM('MC')">MC</button>
+    <button class="cb mem" onclick="SM('MR')">MR</button>
+    <button class="cb mem" onclick="SM('M+')">M+</button>
+    <button class="cb mem" onclick="SM('M-')">M−</button>
+  </div>
+  <div class="sgrid">
+    <button class="cb fn" onclick="SF('sin')">sin</button>
+    <button class="cb fn" onclick="SF('cos')">cos</button>
+    <button class="cb fn" onclick="SF('tan')">tan</button>
+    <button class="cb fn" onclick="SF('sqrt')">√x</button>
+  </div>
+  <div class="sgrid">
+    <button class="cb fn2" onclick="SF('log')">log</button>
+    <button class="cb fn2" onclick="SF('ln')">ln</button>
+    <button class="cb fn2" onclick="SF('cbrt')">∛x</button>
+    <button class="cb fn2" onclick="SF('fact')">x!</button>
+  </div>
+  <div class="sgrid">
+    <button class="cb fn" onclick="SF('sq')">x²</button>
+    <button class="cb fn" onclick="SF('cube')">x³</button>
+    <button class="cb fn" onclick="SA(Math.PI.toString())">π</button>
+    <button class="cb fn" onclick="SA(Math.E.toString())">e</button>
+  </div>
+  <div class="cgrid">
+    <button class="cb clr" onclick="SC()">C</button>
+    <button class="cb bck" onclick="SB()">⌫</button>
+    <button class="cb fn" onclick="SA('(')"> ( </button>
+    <button class="cb fn" onclick="SA(')')"> ) </button>
+    <button class="cb" onclick="SA('7')">7</button>
+    <button class="cb" onclick="SA('8')">8</button>
+    <button class="cb" onclick="SA('9')">9</button>
+    <button class="cb op" onclick="SA('/')">÷</button>
+    <button class="cb" onclick="SA('4')">4</button>
+    <button class="cb" onclick="SA('5')">5</button>
+    <button class="cb" onclick="SA('6')">6</button>
+    <button class="cb op" onclick="SA('*')">×</button>
+    <button class="cb" onclick="SA('1')">1</button>
+    <button class="cb" onclick="SA('2')">2</button>
+    <button class="cb" onclick="SA('3')">3</button>
+    <button class="cb op" onclick="SA('-')">−</button>
+    <button class="cb z2" onclick="SA('0')">0</button>
+    <button class="cb" onclick="SA('.')">.</button>
+    <button class="cb eq" onclick="SE()">=</button>
+    <button class="cb op" onclick="SA('+')">+</button>
+  </div>
+  <div id="smem" style="text-align:right;font-size:11px;color:var(--muted);margin-top:5px;">Memory: 0</div>
+</div>
+
+<!-- TRIG -->
+<div class="sec" id="sc-trig">
+  <div class="shdr">
+    <div class="sic" style="background:#F0FDF4">📐</div>
+    <div><div class="stitle">Trigonometry</div><div class="ssub">sin, cos, tan, inverse, hyp functions</div></div>
+  </div>
+  <div class="field"><label>Angle (Degrees) / Value</label><input id="tval" type="number" placeholder="e.g. 45 for 45°"><div class="eg">💡 For inverse functions, enter the ratio value</div></div>
+  <div class="sgrid">
+    <button class="cb fn" onclick="TF('sin')">sin</button>
+    <button class="cb fn" onclick="TF('cos')">cos</button>
+    <button class="cb fn" onclick="TF('tan')">tan</button>
+    <button class="cb fn" onclick="TF('cot')">cot</button>
+  </div>
+  <div class="sgrid">
+    <button class="cb fn2" onclick="TF('sec')">sec</button>
+    <button class="cb fn2" onclick="TF('cosec')">cosec</button>
+    <button class="cb fn2" onclick="TF('asin')">sin⁻¹</button>
+    <button class="cb fn2" onclick="TF('acos')">cos⁻¹</button>
+  </div>
+  <div class="sgrid">
+    <button class="cb mem" onclick="TF('atan')">tan⁻¹</button>
+    <button class="cb mem" onclick="TF('sinh')">sinh</button>
+    <button class="cb mem" onclick="TF('cosh')">cosh</button>
+    <button class="cb mem" onclick="TF('tanh')">tanh</button>
+  </div>
+  <div class="sres" id="tres">
+    <div class="sval" id="tresval"></div>
+    <div class="slabel" id="treslbl"></div>
+  </div>
+</div>
+
+<!-- LOG & POWER -->
+<div class="sec" id="sc-log">
+  <div class="shdr">
+    <div class="sic" style="background:#FFF7ED">📊</div>
+    <div><div class="stitle">Log & Power</div><div class="ssub">log, ln, power, roots, factorial, nCr, nPr</div></div>
+  </div>
+  <div class="field"><label>Value (n)</label><input id="ln_n" type="number" placeholder="e.g. 100"></div>
+  <div class="field"><label>Power / r (for nʳ, nCr, nPr)</label><input id="ln_r" type="number" placeholder="e.g. 2 (optional)"></div>
+  <div class="sgrid">
+    <button class="cb fn" onclick="LF('log10')">log₁₀</button>
+    <button class="cb fn" onclick="LF('log2')">log₂</button>
+    <button class="cb fn" onclick="LF('ln')">ln</button>
+    <button class="cb fn" onclick="LF('sqrt')">√n</button>
+  </div>
+  <div class="sgrid">
+    <button class="cb fn2" onclick="LF('cbrt')">∛n</button>
+    <button class="cb fn2" onclick="LF('sq')">n²</button>
+    <button class="cb fn2" onclick="LF('cube')">n³</button>
+    <button class="cb fn2" onclick="LF('pow')">nʳ</button>
+  </div>
+  <div class="sgrid">
+    <button class="cb mem" onclick="LF('fact')">n!</button>
+    <button class="cb mem" onclick="LF('ncr')">nCr</button>
+    <button class="cb mem" onclick="LF('npr')">nPr</button>
+    <button class="cb mem" onclick="LF('recip')">1/n</button>
+  </div>
+  <div class="sres" id="lres">
+    <div class="sval" id="lresval"></div>
+    <div class="slabel" id="lreslbl"></div>
+  </div>
+</div>
+
+<!-- UNIT CONVERTER -->
+<div class="sec" id="sc-unit">
+  <div class="shdr">
+    <div class="sic" style="background:#EFF6FF">🔄</div>
+    <div><div class="stitle">Unit Converter</div><div class="ssub">11 categories · 80+ units</div></div>
+  </div>
+  <div class="field"><label>Category</label>
+    <select id="ucat" onchange="updUnits()">
+      <option value="length">📏 Length</option>
+      <option value="weight">⚖️ Weight</option>
+      <option value="temp">🌡️ Temperature</option>
+      <option value="area">📐 Area</option>
+      <option value="volume">🧪 Volume</option>
+      <option value="speed">🚀 Speed</option>
+      <option value="time">⏱️ Time</option>
+      <option value="pressure">💨 Pressure</option>
+      <option value="energy">⚡ Energy</option>
+      <option value="data">💾 Data</option>
+      <option value="fuel">⛽ Fuel</option>
+    </select>
+  </div>
+  <div class="field"><label>Value</label><input id="uval" type="number" placeholder="Enter value"></div>
+  <div class="g2">
+    <div class="field"><label>From</label><select id="ufrom"></select></div>
+    <div class="field"><label>To</label><select id="uto"></select></div>
+  </div>
+  <button class="btn" onclick="doConvert()">🔄 Convert</button>
+  <div class="sres" id="ures">
+    <div class="sval" id="uresval"></div>
+    <div class="slabel" id="ureslbl"></div>
+  </div>
+</div>
+
+<!-- CONSTANTS -->
+<div class="sec" id="sc-const">
+  <div class="shdr">
+    <div class="sic" style="background:#F5F3FF">🌐</div>
+    <div><div class="stitle">Math & Physics Constants</div><div class="ssub">Famous values for reference</div></div>
+  </div>
+  <div class="rbox show ctable" style="margin-top:0">
+    <div class="rrow"><span>π (Pi)</span><span style="color:var(--primary);font-weight:700;font-size:13px">3.14159265358979</span></div>
+    <div class="rrow"><span>e (Euler)</span><span style="color:var(--primary);font-weight:700;font-size:13px">2.71828182845905</span></div>
+    <div class="rrow"><span>φ (Golden Ratio)</span><span style="color:var(--primary);font-weight:700;font-size:13px">1.61803398874989</span></div>
+    <div class="rrow"><span>√2</span><span style="color:var(--primary);font-weight:700;font-size:13px">1.41421356237310</span></div>
+    <div class="rrow"><span>√3</span><span style="color:var(--primary);font-weight:700;font-size:13px">1.73205080756888</span></div>
+    <div class="rrow"><span>Speed of Light</span><span style="color:var(--green);font-weight:700;font-size:13px">2.998×10⁸ m/s</span></div>
+    <div class="rrow"><span>Gravity (g)</span><span style="color:var(--green);font-weight:700;font-size:13px">9.80665 m/s²</span></div>
+    <div class="rrow"><span>Avogadro's No.</span><span style="color:var(--green);font-weight:700;font-size:13px">6.022×10²³/mol</span></div>
+    <div class="rrow"><span>Planck (h)</span><span style="color:var(--green);font-weight:700;font-size:13px">6.626×10⁻³⁴ J·s</span></div>
+  </div>
+</div>
+
+</div><!-- card -->
+</div><!-- p-sci -->
+
+<!-- ======== AI PANEL ======== -->
+<div class="panel" id="p-ai">
+<div class="card">
+  <div class="shdr">
+    <div class="sic" style="background:linear-gradient(135deg,#EEF2FF,#F5F3FF)">🤖</div>
+    <div><div class="stitle">AI Calculator Assistant</div><div class="ssub">Ask in natural language</div></div>
+  </div>
+  <div class="aisugs">
+    <span class="aisug" onclick="aiQ(this)">25000 ka 18% GST</span>
+    <span class="aisug" onclick="aiQ(this)">EMI 500000 5 years 8.5%</span>
+    <span class="aisug" onclick="aiQ(this)">Salary 45000 10% hike</span>
+    <span class="aisug" onclick="aiQ(this)">BMI 70kg 175cm</span>
+    <span class="aisug" onclick="aiQ(this)">450 out of 600 marks</span>
+    <span class="aisug" onclick="aiQ(this)">profit cp 1000 sp 1350</span>
+  </div>
+  <div class="aichat" id="aichat">
+    <div class="aimsg b">👋 Hello! Ask me anything:<br><br>• "25000 ka 18% GST?"<br>• "EMI 5 lakh 5 years 8.5%"<br>• "Salary 45000, 10% hike"<br>• "BMI 70kg 175cm"<br>• "450 out of 600"</div>
+  </div>
+  <div class="airow">
+    <input id="aiinput" placeholder="Type your question..." onkeydown="if(event.key==='Enter')sendAI()">
+    <button class="aisend" onclick="sendAI()">➤</button>
+  </div>
+</div>
+</div>
+
+<!-- ======== HISTORY PANEL ======== -->
+<div class="panel" id="p-history">
+<div class="card">
+  <div class="shdr">
+    <div class="sic" style="background:#EEF2FF">🕐</div>
+    <div><div class="stitle">Calculation History</div><div class="ssub">Auto-saved · Searchable</div></div>
+  </div>
+  <input class="hsearch" id="hsearch" placeholder="🔍 Search history..." oninput="filterHist(this.value)">
+  <div style="display:flex;justify-content:flex-end;margin-bottom:8px">
+    <button onclick="clearHist()" style="font-size:12px;color:var(--red);background:none;border:none;cursor:pointer;font-weight:600;">🗑️ Clear All</button>
+  </div>
+  <div id="histlist"></div>
+</div>
+</div>
+
+<!-- ======== FAVS PANEL ======== -->
+<div class="panel" id="p-favs">
+<div class="card">
+  <div class="shdr">
+    <div class="sic" style="background:#FFF7ED">⭐</div>
+    <div><div class="stitle">Favorites</div><div class="ssub">Your most used calculators</div></div>
+  </div>
+  <div class="favgrid" id="favgrid"></div>
+  <div id="favempty" style="text-align:center;color:var(--muted);padding:28px;display:none">
+    <div style="font-size:38px;margin-bottom:8px">⭐</div>
+    <div style="font-weight:700">No favorites yet!</div>
+    <div style="font-size:12px;margin-top:4px">Tap 🤍 on any calculator to add</div>
+  </div>
+</div>
+</div>
+
+<!-- ======== SETTINGS PANEL ======== -->
+<div class="panel" id="p-settings">
+<div class="card">
+  <div class="shdr">
+    <div class="sic" style="background:#EEF2FF">⚙️</div>
+    <div><div class="stitle">Settings</div><div class="ssub">Customize your experience</div></div>
+  </div>
+  <div class="srow">
+    <div><div class="slbl">🌙 Dark Mode</div><div class="ssmall">Switch to dark theme</div></div>
+    <button class="tog" id="dktog" onclick="toggleDark()"></button>
+  </div>
+  <div class="srow">
+    <div><div class="slbl">🎨 App Theme</div></div>
+  </div>
+  <div class="tgrid">
+    <div class="tdot active" style="background:linear-gradient(135deg,#4F46E5,#EC4899)" onclick="setTheme('default',this)"></div>
+    <div class="tdot" style="background:linear-gradient(135deg,#0891B2,#06B6D4)" onclick="setTheme('ocean',this)"></div>
+    <div class="tdot" style="background:linear-gradient(135deg,#16A34A,#22C55E)" onclick="setTheme('forest',this)"></div>
+    <div class="tdot" style="background:linear-gradient(135deg,#EA580C,#F97316)" onclick="setTheme('sunset',this)"></div>
+    <div class="tdot" style="background:linear-gradient(135deg,#0F0F1A,#312E81)" onclick="setTheme('dark',this)"></div>
+  </div>
+  <div class="srow">
+    <div><div class="slbl">🔊 Button Sound</div><div class="ssmall">Click sound on buttons</div></div>
+    <button class="tog" id="sndtog" onclick="togSound()"></button>
+  </div>
+  <div class="srow" onclick="shareApp()" style="cursor:pointer">
+    <div><div class="slbl">📤 Share App</div><div class="ssmall">Share with friends</div></div>
+    <span style="color:var(--muted)">›</span>
+  </div>
+  <div class="srow">
+    <div><div class="slbl">ℹ️ About</div><div class="ssmall">All Calculator Master · Built June 2026 · Free</div></div>
+  </div>
+</div>
+</div>
+
+</div><!-- wrap -->
+
+<!-- BOTTOM NAV -->
+<div class="bnav">
+  <button class="nbtn active" id="nb-home" onclick="goPage('home')"><span class="nic">🏠</span><span class="nlb">Home</span></button>
+  <button class="nbtn" id="nb-history" onclick="goPage('history')"><span class="nic">🕐</span><span class="nlb">History</span></button>
+  <button class="nbtn" id="nb-favs" onclick="goPage('favs')"><span class="nic">⭐</span><span class="nlb">Favorites</span></button>
+  <button class="nbtn" id="nb-settings" onclick="goPage('settings')"><span class="nic">⚙️</span><span class="nlb">Settings</span></button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ===== STATE =====
+var bx='', sx='', memVal=0;
+var hist=JSON.parse(localStorage.getItem('ch')||'[]');
+var favs=JSON.parse(localStorage.getItem('cf')||'[]');
+var isDark=localStorage.getItem('dk')==='1';
+var curTheme=localStorage.getItem('th')||'default';
+var sndOn=localStorage.getItem('snd')==='1';
+var cachedRates={};
+var curPage='home';
+
+// ===== INIT =====
+(function init(){
+  applyTheme(curTheme);
+  if(isDark){document.body.setAttribute('data-theme','dark');document.getElementById('dkbtn').textContent='☀️';document.getElementById('dktog').classList.add('on');}
+  if(sndOn)document.getElementById('sndtog').classList.add('on');
+  updUnits();
+  // Set default currency values
+  var cf=document.getElementById('cfrom');
+  var ct=document.getElementById('cto');
+  if(cf)cf.value='INR';
+  if(ct)ct.value='USD';
+  renderHist();
+  renderFavs();
+  loadFavBtns();
+  setInterval(function(){
+    var n=new Date();
+    document.getElementById('clk').textContent='⏰ '+n.toLocaleTimeString('en-IN')+'  ·  '+n.toLocaleDateString('en-IN',{weekday:'short',day:'2-digit',month:'short'});
+  },1000);
+})();
+
+// ===== TOAST =====
+function toast(msg){
+  var t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(function(){t.classList.remove('show');},2000);
+}
+
+// ===== SOUND =====
+function playClick(){
+  if(!sndOn)return;
+  try{var ctx=new AudioContext();var o=ctx.createOscillator();var g=ctx.createGain();o.connect(g);g.connect(ctx.destination);o.frequency.value=800;g.gain.setValueAtTime(0.08,ctx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.04);o.start();o.stop(ctx.currentTime+0.04);}catch(e){}
+}
+function togSound(){sndOn=!sndOn;localStorage.setItem('snd',sndOn?'1':'0');document.getElementById('sndtog').classList.toggle('on',sndOn);toast(sndOn?'Sound ON 🔊':'Sound OFF 🔇');}
+
+// ===== DARK MODE =====
+function toggleDark(){
+  isDark=!isDark;localStorage.setItem('dk',isDark?'1':'0');
+  if(isDark){document.body.setAttribute('data-theme','dark');document.getElementById('dkbtn').textContent='☀️';document.getElementById('dktog').classList.add('on');}
+  else{applyTheme(curTheme);document.getElementById('dkbtn').textContent='🌙';document.getElementById('dktog').classList.remove('on');}
+}
+
+// ===== THEME =====
+function applyTheme(t){
+  if(!isDark)document.body.setAttribute('data-theme',t);
+  curTheme=t;localStorage.setItem('th',t);
+}
+function setTheme(t,el){
+  applyTheme(t);
+  document.querySelectorAll('.tdot').forEach(function(d){d.classList.remove('active');});
+  if(el)el.classList.add('active');
+  toast('Theme changed! ✨');
+}
+function openTheme(){goPage('settings');}
+
+// ===== NAVIGATION =====
+function goPage(page){
+  curPage=page;
+  // Hide all panels
+  document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('show');});
+  // Hide big tabs and sub tabs
+  document.getElementById('bigtabs').style.display='none';
+  document.querySelectorAll('.sub-tabs').forEach(function(s){s.style.display='none';});
+  // Update bottom nav
+  document.querySelectorAll('.nbtn').forEach(function(b){b.classList.remove('active');});
+  var nb=document.getElementById('nb-'+page);
+  if(nb)nb.classList.add('active');
+  if(page==='home'){
+    document.getElementById('bigtabs').style.display='';
+    document.getElementById('p-basic').classList.add('show');
+    document.getElementById('st-basic').style.display='';
+    document.getElementById('nb-home').classList.add('active');
+  } else {
+    var panel=document.getElementById('p-'+page);
+    if(panel)panel.classList.add('show');
+    if(page==='history')renderHist();
+    if(page==='favs')renderFavs();
+  }
+}
+
+// ===== BIG TABS =====
+function switchTab(tab){
+  document.querySelectorAll('.btab').forEach(function(b){b.classList.remove('active');});
+  document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('show');});
+  document.querySelectorAll('.sub-tabs').forEach(function(s){s.style.display='none';s.classList.remove('show');});
+  var btn=document.getElementById('bt-'+tab);
+  if(btn)btn.classList.add('active');
+  var panel=document.getElementById('p-'+tab);
+  if(panel)panel.classList.add('show');
+  var st=document.getElementById('st-'+tab);
+  if(st){st.style.display='';st.classList.add('show');}
+}
+
+// ===== SUB SECTIONS =====
+function switchSec(panel, secId, btn){
+  var p=document.getElementById('p-'+panel);
+  if(!p)return;
+  p.querySelectorAll('.sec').forEach(function(s){s.classList.remove('show');});
+  var stabs=document.getElementById('st-'+panel);
+  if(stabs)stabs.querySelectorAll('.stab').forEach(function(b){b.classList.remove('active');});
+  var sec=document.getElementById(secId);
+  if(sec)sec.classList.add('show');
+  if(btn)btn.classList.add('active');
+}
+
+// ===== BASIC CALCULATOR =====
+function B(v){
+  playClick();
+  var d=document.getElementById('bval'), e=document.getElementById('bexpr');
+  if(v==='C'){bx='';d.textContent='0';e.textContent='';return;}
+  if(v==='back'){bx=bx.slice(0,-1);d.textContent=bx||'0';return;}
+  if(v==='='){
+    try{
+      var expr=bx;
+      var r=Function('"use strict";return('+bx+')')();
+      r=Math.round(r*1e10)/1e10;
+      e.textContent=expr+' =';d.textContent=r;
+      addHist(expr,String(r));
+      bx=String(r);
+    }catch(err){d.textContent='Error';bx='';}
+    return;
+  }
+  bx+=v;d.textContent=bx;
+}
+
+// ===== SCIENTIFIC CALCULATOR =====
+function SA(v){playClick();sx+=v;document.getElementById('sval').textContent=sx;}
+function SC(){sx='';document.getElementById('sval').textContent='0';document.getElementById('sexpr').textContent='';}
+function SB(){sx=sx.slice(0,-1);document.getElementById('sval').textContent=sx||'0';}
+function SE(){
+  playClick();
+  var d=document.getElementById('sval'),e=document.getElementById('sexpr');
+  try{
+    var expr=sx;
+    var r=Function('"use strict";return('+sx+')')();
+    r=Math.round(r*1e10)/1e10;
+    e.textContent=expr+' =';d.textContent=r;
+    addHist(expr,String(r));sx=String(r);
+  }catch(err){d.textContent='Error';sx='';}
+}
+function SF(fn){
+  playClick();
+  var v=parseFloat(sx)||0, r, label;
+  var rad=v*Math.PI/180;
+  if(fn==='sin'){r=Math.sin(rad);label='sin('+v+'°)';}
+  else if(fn==='cos'){r=Math.cos(rad);label='cos('+v+'°)';}
+  else if(fn==='tan'){r=Math.tan(rad);label='tan('+v+'°)';}
+  else if(fn==='sqrt'){r=Math.sqrt(v);label='√'+v;}
+  else if(fn==='cbrt'){r=Math.cbrt(v);label='∛'+v;}
+  else if(fn==='log'){r=Math.log10(v);label='log₁₀('+v+')';}
+  else if(fn==='ln'){r=Math.log(v);label='ln('+v+')';}
+  else if(fn==='sq'){r=v*v;label=v+'²';}
+  else if(fn==='cube'){r=v*v*v;label=v+'³';}
+  else if(fn==='fact'){r=fact(v);label=v+'!';}
+  if(r!==undefined){
+    r=Math.round(r*1e10)/1e10;
+    document.getElementById('sexpr').textContent=label+' =';
+    document.getElementById('sval').textContent=r;
+    addHist(label,String(r));sx=String(r);
+  }
+}
+function SM(op){
+  var v=parseFloat(document.getElementById('sval').textContent)||0;
+  if(op==='MC')memVal=0;
+  else if(op==='MR'){document.getElementById('sval').textContent=memVal;sx=String(memVal);}
+  else if(op==='M+')memVal+=v;
+  else if(op==='M-')memVal-=v;
+  document.getElementById('smem').textContent='Memory: '+memVal;
+  toast('Memory: '+memVal);
+}
+function fact(n){if(n<0||n>20)return NaN;if(n===0||n===1)return 1;var r=1;for(var i=2;i<=n;i++)r*=i;return r;}
+
+// ===== TRIG =====
+function TF(fn){
+  var v=+document.getElementById('tval').value;
+  var rad=v*Math.PI/180, r, label;
+  if(fn==='sin'){r=Math.sin(rad);label='sin('+v+'°)';}
+  else if(fn==='cos'){r=Math.cos(rad);label='cos('+v+'°)';}
+  else if(fn==='tan'){r=Math.tan(rad);label='tan('+v+'°)';}
+  else if(fn==='cot'){r=1/Math.tan(rad);label='cot('+v+'°)';}
+  else if(fn==='sec'){r=1/Math.cos(rad);label='sec('+v+'°)';}
+  else if(fn==='cosec'){r=1/Math.sin(rad);label='cosec('+v+'°)';}
+  else if(fn==='asin'){r=Math.asin(v)*180/Math.PI;label='sin⁻¹('+v+')';}
+  else if(fn==='acos'){r=Math.acos(v)*180/Math.PI;label='cos⁻¹('+v+')';}
+  else if(fn==='atan'){r=Math.atan(v)*180/Math.PI;label='tan⁻¹('+v+')';}
+  else if(fn==='sinh'){r=Math.sinh(v);label='sinh('+v+')';}
+  else if(fn==='cosh'){r=Math.cosh(v);label='cosh('+v+')';}
+  else if(fn==='tanh'){r=Math.tanh(v);label='tanh('+v+')';}
+  r=Math.round(r*1e8)/1e8;
+  document.getElementById('tresval').textContent=r;
+  document.getElementById('treslbl').textContent=label+' = '+r;
+  document.getElementById('tres').classList.add('show');
+  addHist(label,String(r));
+}
+
+// ===== LOG =====
+function LF(fn){
+  var n=+document.getElementById('ln_n').value;
+  var r2=+document.getElementById('ln_r').value;
+  var r, label;
+  if(fn==='log10'){r=Math.log10(n);label='log₁₀('+n+')';}
+  else if(fn==='log2'){r=Math.log2(n);label='log₂('+n+')';}
+  else if(fn==='ln'){r=Math.log(n);label='ln('+n+')';}
+  else if(fn==='sqrt'){r=Math.sqrt(n);label='√'+n;}
+  else if(fn==='cbrt'){r=Math.cbrt(n);label='∛'+n;}
+  else if(fn==='sq'){r=n*n;label=n+'²';}
+  else if(fn==='cube'){r=n*n*n;label=n+'³';}
+  else if(fn==='pow'){r=Math.pow(n,r2);label=n+'^'+r2;}
+  else if(fn==='fact'){r=fact(n);label=n+'!';}
+  else if(fn==='ncr'){r=fact(n)/(fact(r2)*fact(n-r2));label='C('+n+','+r2+')';}
+  else if(fn==='npr'){r=fact(n)/fact(n-r2);label='P('+n+','+r2+')';}
+  else if(fn==='recip'){r=1/n;label='1/'+n;}
+  r=Math.round(r*1e8)/1e8;
+  document.getElementById('lresval').textContent=isFinite(r)?r:'∞';
+  document.getElementById('lreslbl').textContent=label;
+  document.getElementById('lres').classList.add('show');
+  addHist(label,String(r));
+}
+
+// ===== UNIT CONVERTER =====
+var udata={
+  length:{u:['Meter','Kilometer','Centimeter','Millimeter','Mile','Yard','Foot','Inch'],f:[1,1000,0.01,0.001,1609.344,0.9144,0.3048,0.0254]},
+  weight:{u:['Kilogram','Gram','Milligram','Pound','Ounce','Ton','Quintal'],f:[1,0.001,0.000001,0.453592,0.0283495,1000,100]},
+  temp:{u:['Celsius','Fahrenheit','Kelvin'],f:null},
+  area:{u:['Sq Meter','Sq Km','Hectare','Acre','Sq Foot','Bigha(UP)'],f:[1,1000000,10000,4046.86,0.092903,2529]},
+  volume:{u:['Liter','Milliliter','Cubic Meter','Gallon(US)','Pint','Cup'],f:[1,0.001,1000,3.78541,0.473176,0.236588]},
+  speed:{u:['m/s','km/h','mph','knot'],f:[1,0.277778,0.44704,0.514444]},
+  time:{u:['Second','Minute','Hour','Day','Week','Month','Year'],f:[1,60,3600,86400,604800,2629746,31556952]},
+  pressure:{u:['Pascal','Bar','PSI','Atmosphere','kPa'],f:[1,100000,6894.76,101325,1000]},
+  energy:{u:['Joule','Kilojoule','Calorie','Kilocalorie','kWh'],f:[1,1000,4.184,4184,3600000]},
+  data:{u:['Byte','Kilobyte','Megabyte','Gigabyte','Terabyte','Bit'],f:[1,1024,1048576,1073741824,1099511627776,0.125]},
+  fuel:{u:['km/L','L/100km','mpg(US)'],f:null}
+};
+function updUnits(){
+  var cat=document.getElementById('ucat');if(!cat)return;
+  var c=cat.value, d=udata[c];
+  var f=document.getElementById('ufrom'),t=document.getElementById('uto');
+  if(!f||!t)return;
+  f.innerHTML='';t.innerHTML='';
+  d.u.forEach(function(u){f.innerHTML+='<option>'+u+'</option>';t.innerHTML+='<option>'+u+'</option>';});
+  if(d.u.length>1)t.selectedIndex=1;
+}
+function doConvert(){
+  var cat=document.getElementById('ucat').value;
+  var val=+document.getElementById('uval').value;
+  var fi=document.getElementById('ufrom').selectedIndex;
+  var ti=document.getElementById('uto').selectedIndex;
+  var d=udata[cat], r;
+  if(cat==='temp'){
+    var c;
+    if(fi===0)c=val;else if(fi===1)c=(val-32)*5/9;else c=val-273.15;
+    if(ti===0)r=c;else if(ti===1)r=c*9/5+32;else r=c+273.15;
+  } else if(cat==='fuel'){
+    var kl; if(fi===0)kl=val;else if(fi===1)kl=100/val;else kl=val*0.425144;
+    if(ti===0)r=kl;else if(ti===1)r=100/kl;else r=kl/0.425144;
+  } else {
+    r=val*d.f[fi]/d.f[ti];
+  }
+  r=Math.round(r*1e6)/1e6;
+  document.getElementById('uresval').textContent=val+' '+d.u[fi]+' = '+r+' '+d.u[ti];
+  document.getElementById('ureslbl').textContent='Unit Conversion Result';
+  document.getElementById('ures').classList.add('show');
+}
+
+// ===== CURRENCY =====
+function loadCurrencies(){
+  var cur=[
+    {code:'INR',name:'India - Indian Rupee (INR)'},
+    {code:'USD',name:'USA - US Dollar (USD)'},
+    {code:'EUR',name:'Europe - Euro (EUR)'},
+    {code:'GBP',name:'UK - British Pound (GBP)'},
+    {code:'AED',name:'UAE - Dirham (AED)'},
+    {code:'SAR',name:'Saudi Arabia - Riyal (SAR)'},
+    {code:'KWD',name:'Kuwait - Kuwaiti Dinar (KWD)'},
+    {code:'QAR',name:'Qatar - Qatari Riyal (QAR)'},
+    {code:'OMR',name:'Oman - Omani Rial (OMR)'},
+    {code:'BHD',name:'Bahrain - Bahraini Dinar (BHD)'},
+    {code:'JPY',name:'Japan - Japanese Yen (JPY)'},
+    {code:'CNY',name:'China - Chinese Yuan (CNY)'},
+    {code:'AUD',name:'Australia - Australian Dollar (AUD)'},
+    {code:'CAD',name:'Canada - Canadian Dollar (CAD)'},
+    {code:'SGD',name:'Singapore - Singapore Dollar (SGD)'},
+    {code:'CHF',name:'Switzerland - Swiss Franc (CHF)'},
+    {code:'HKD',name:'Hong Kong - HK Dollar (HKD)'},
+    {code:'NZD',name:'New Zealand - NZ Dollar (NZD)'},
+    {code:'NPR',name:'Nepal - Nepali Rupee (NPR)'},
+    {code:'PKR',name:'Pakistan - Pakistani Rupee (PKR)'},
+    {code:'BDT',name:'Bangladesh - Bangladeshi Taka (BDT)'},
+    {code:'LKR',name:'Sri Lanka - Sri Lankan Rupee (LKR)'},
+    {code:'MYR',name:'Malaysia - Malaysian Ringgit (MYR)'},
+    {code:'THB',name:'Thailand - Thai Baht (THB)'},
+    {code:'IDR',name:'Indonesia - Indonesian Rupiah (IDR)'},
+    {code:'PHP',name:'Philippines - Philippine Peso (PHP)'},
+    {code:'VND',name:'Vietnam - Vietnamese Dong (VND)'},
+    {code:'KRW',name:'South Korea - Korean Won (KRW)'},
+    {code:'TWD',name:'Taiwan - Taiwan Dollar (TWD)'},
+    {code:'MMK',name:'Myanmar - Myanmar Kyat (MMK)'},
+    {code:'MVR',name:'Maldives - Maldivian Rufiyaa (MVR)'},
+    {code:'AFN',name:'Afghanistan - Afghan Afghani (AFN)'},
+    {code:'MUR',name:'Mauritius - Mauritian Rupee (MUR)'},
+    {code:'ZAR',name:'South Africa - South African Rand (ZAR)'},
+    {code:'NGN',name:'Nigeria - Nigerian Naira (NGN)'},
+    {code:'KES',name:'Kenya - Kenyan Shilling (KES)'},
+    {code:'GHS',name:'Ghana - Ghanaian Cedi (GHS)'},
+    {code:'EGP',name:'Egypt - Egyptian Pound (EGP)'},
+    {code:'MAD',name:'Morocco - Moroccan Dirham (MAD)'},
+    {code:'ETB',name:'Ethiopia - Ethiopian Birr (ETB)'},
+    {code:'RUB',name:'Russia - Russian Ruble (RUB)'},
+    {code:'TRY',name:'Turkey - Turkish Lira (TRY)'},
+    {code:'BRL',name:'Brazil - Brazilian Real (BRL)'},
+    {code:'MXN',name:'Mexico - Mexican Peso (MXN)'},
+    {code:'ARS',name:'Argentina - Argentine Peso (ARS)'},
+    {code:'SEK',name:'Sweden - Swedish Krona (SEK)'},
+    {code:'NOK',name:'Norway - Norwegian Krone (NOK)'},
+    {code:'DKK',name:'Denmark - Danish Krone (DKK)'},
+    {code:'PLN',name:'Poland - Polish Zloty (PLN)'},
+    {code:'ILS',name:'Israel - Israeli Shekel (ILS)'},
+    {code:'JOD',name:'Jordan - Jordanian Dinar (JOD)'},
+    {code:'CLP',name:'Chile - Chilean Peso (CLP)'},
+    {code:'COP',name:'Colombia - Colombian Peso (COP)'},
+  ];
+  var f=document.getElementById('cfrom'),t=document.getElementById('cto');
+  if(!f||!t){setTimeout(loadCurrencies,300);return;}
+  f.innerHTML='';t.innerHTML='';
+  cur.forEach(function(c){
+    var o1=document.createElement('option');o1.value=c.code;o1.textContent=c.name;f.appendChild(o1);
+    var o2=document.createElement('option');o2.value=c.code;o2.textContent=c.name;t.appendChild(o2);
+  });
+  f.value='INR';t.value='USD';
+}
+function swapCurr(){var f=document.getElementById('cfrom'),t=document.getElementById('cto');var tmp=f.value;f.value=t.value;t.value=tmp;}
+function convCurr(){
+  var a=+document.getElementById('camount').value;
+  var fr=document.getElementById('cfrom').value;
+  var to=document.getElementById('cto').value;
+  if(!a){toast('Enter amount!');return;}
+  var btn=document.querySelector('#s-curr .btn');
+  btn.textContent='⏳ Loading...';btn.disabled=true;
+  fetch('https://api.exchangerate-api.com/v4/latest/'+fr)
+    .then(function(r){return r.json();})
+    .then(function(data){
+      cachedRates[fr]=data;
+      var rate=data.rates[to];
+      var result=(a*rate).toFixed(4);
+      document.getElementById('camt').textContent=a+' '+fr+' = '+result+' '+to;
+      document.getElementById('crate').textContent='1 '+fr+' = '+rate.toFixed(6)+' '+to;
+      document.getElementById('ctime').textContent='🕐 Updated: '+new Date(data.time_last_updated*1000).toLocaleString('en-IN');
+      document.getElementById('cres').style.display='block';
+      addHist(a+' '+fr+' → '+to,result);
+    })
+    .catch(function(){
+      if(cachedRates[fr]){
+        var rate=cachedRates[fr].rates[to];
+        var result=(a*rate).toFixed(4);
+        document.getElementById('camt').textContent=a+' '+fr+' = '+result+' '+to+' (Cached)';
+        document.getElementById('cres').style.display='block';
+      } else {toast('No internet & no cached rate!');}
+    })
+    .finally(function(){btn.textContent='💱 Convert Now';btn.disabled=false;});
+}
+
+// ===== CALCULATORS =====
+function fmt(n){return '₹'+Math.round(n).toLocaleString('en-IN');}
+
+function calcEMI(){
+  var P=+document.getElementById('eloan').value;
+  var r=+document.getElementById('erate').value/12/100;
+  var n=+document.getElementById('eten').value;
+  if(!P||!r||!n){toast('Fill all fields!');return;}
+  var e=P*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1);
+  document.getElementById('eval').textContent=fmt(e)+'/month';
+  document.getElementById('eprin').textContent=fmt(P);
+  document.getElementById('eint').textContent=fmt(e*n-P);
+  document.getElementById('etot').textContent=fmt(e*n);
+  document.getElementById('eres').classList.add('show');
+  addHist('EMI ₹'+P+' @ '+document.getElementById('erate').value+'%',fmt(e));
+}
+
+function calcPct(){
+  var v=+document.getElementById('pval').value;
+  var p=+document.getElementById('ppct').value;
+  if(!v||!p){toast('Fill both fields!');return;}
+  var r=v*p/100;
+  document.getElementById('pamt').textContent=r.toFixed(2);
+  document.getElementById('pinc').textContent=(v+r).toFixed(2);
+  document.getElementById('pdec').textContent=(v-r).toFixed(2);
+  document.getElementById('pres').classList.add('show');
+  addHist(p+'% of '+v,r.toFixed(2));
+}
+
+function calcMarks(){
+  var o=+document.getElementById('mobt').value;
+  var m=+document.getElementById('mmax').value;
+  if(!o||!m){toast('Fill both fields!');return;}
+  var p=(o/m)*100;
+  var g=p>=90?'A+ (Outstanding)':p>=80?'A (Excellent)':p>=70?'B+ (Very Good)':p>=60?'B (Good)':p>=50?'C (Average)':p>=33?'D (Pass)':'F (Fail)';
+  document.getElementById('mpct').textContent=p.toFixed(2)+'%';
+  document.getElementById('mgrade').textContent=g;
+  document.getElementById('mstat').textContent=p>=33?'✅ PASS':'❌ FAIL';
+  document.getElementById('mres').classList.add('show');
+  addHist('Marks '+o+'/'+m,p.toFixed(2)+'%');
+}
+
+function calcProfit(){
+  var cp=+document.getElementById('pcp').value;
+  var sp=+document.getElementById('psp').value;
+  if(!cp||!sp){toast('Fill both fields!');return;}
+  var d=sp-cp, pct=(Math.abs(d)/cp)*100;
+  document.getElementById('prstat').textContent=d>0?'📈 PROFIT':d<0?'📉 LOSS':'➡️ Break Even';
+  document.getElementById('pramt').textContent=fmt(Math.abs(d));
+  document.getElementById('prpct').textContent=pct.toFixed(2)+'%';
+  document.getElementById('prres').classList.add('show');
+  addHist('CP:'+fmt(cp)+' SP:'+fmt(sp),d>0?'Profit '+fmt(d):'Loss '+fmt(Math.abs(d)));
+}
+
+function calcKisan(){
+  var a=+document.getElementById('karea').value;
+  var y=+document.getElementById('kyield').value;
+  var p=+document.getElementById('krate').value;
+  var c=+document.getElementById('kcost').value||0;
+  if(!a||!y||!p){toast('Fill first 3 fields!');return;}
+  var prod=a*y, inc=prod*p;
+  document.getElementById('kprod').textContent=Math.round(prod)+' kg';
+  document.getElementById('kinc').textContent=fmt(inc);
+  document.getElementById('kprofit').textContent=fmt(inc-c)+(inc-c>=0?' 📈':' 📉');
+  document.getElementById('kres').classList.add('show');
+  addHist('Kisan '+a+' bigha',fmt(inc-c)+' profit');
+}
+
+function calcBMI(){
+  var w=+document.getElementById('bwt').value;
+  var h=+document.getElementById('bht').value/100;
+  if(!w||!h){toast('Fill both fields!');return;}
+  var b=w/(h*h);
+  var cat, tip, color;
+  if(b<18.5){cat='⚠️ Underweight';tip='Eat more nutritious food. Consult a doctor.';color='#3B82F6';}
+  else if(b<25){cat='✅ Normal Weight';tip='Great! Maintain your diet and exercise regularly.';color='#10B981';}
+  else if(b<30){cat='⚠️ Overweight';tip='Regular exercise and balanced diet recommended.';color='#F59E0B';}
+  else{cat='❌ Obese';tip='Please consult a doctor for proper guidance.';color='#EF4444';}
+  document.getElementById('bval2').textContent=b.toFixed(1);
+  document.getElementById('bcat').textContent=cat;
+  document.getElementById('bideal').textContent=Math.round(18.5*h*h)+' – '+Math.round(24.9*h*h)+' kg';
+  var bar=document.getElementById('bbar'), ind=document.getElementById('bind');
+  bar.style.display='block';
+  var pct=Math.min(Math.max((b-10)/35*100,0),100);
+  ind.style.marginLeft='calc('+pct+'% - 7px)';
+  ind.style.borderColor=color;
+  document.getElementById('btip').textContent=tip;
+  document.getElementById('btip').style.display='block';
+  document.getElementById('bres').classList.add('show');
+  addHist('BMI '+w+'kg '+Math.round(h*100)+'cm',b.toFixed(1));
+}
+
+function calcAge(){
+  var dobVal=document.getElementById('adob').value;
+  if(!dobVal){toast('Enter date of birth!');return;}
+  var dob=new Date(dobVal), now=new Date();
+  var y=now.getFullYear()-dob.getFullYear();
+  var mo=now.getMonth()-dob.getMonth();
+  var d=now.getDate()-dob.getDate();
+  if(d<0){mo--;d+=new Date(now.getFullYear(),now.getMonth(),0).getDate();}
+  if(mo<0){y--;mo+=12;}
+  var totalDays=Math.floor((now-dob)/86400000);
+  var nextBday=new Date(now.getFullYear(),dob.getMonth(),dob.getDate());
+  if(nextBday<=now)nextBday.setFullYear(now.getFullYear()+1);
+  var daysToB=Math.ceil((nextBday-now)/86400000);
+  document.getElementById('aage').textContent=y+' Years, '+mo+' Months, '+d+' Days';
+  document.getElementById('amo').textContent=(y*12+mo).toLocaleString('en-IN')+' Months';
+  document.getElementById('awk').textContent=Math.floor(totalDays/7).toLocaleString('en-IN')+' Weeks';
+  document.getElementById('ady').textContent=totalDays.toLocaleString('en-IN')+' Days';
+  document.getElementById('ahr').textContent=(totalDays*24).toLocaleString('en-IN')+' Hours';
+  document.getElementById('abday').textContent=daysToB+' days ('+nextBday.toLocaleDateString('en-IN')+')';
+  document.getElementById('ageres').classList.add('show');
+  addHist('Age Calculator',y+' Years '+mo+' Months');
+}
+
+// ===== COPY & SHARE =====
+function cp(id){
+  var val=document.getElementById(id).textContent;
+  if(navigator.clipboard){navigator.clipboard.writeText(val).then(function(){toast('Copied! 📋');});}
+  else{toast('Copy: '+val);}
+}
+function cpRes(id){
+  var el=document.getElementById(id);
+  var rows=el.querySelectorAll('.rrow');
+  var text='';
+  rows.forEach(function(r){
+    var s=r.querySelectorAll('span');
+    if(s.length>=2)text+=s[0].textContent+': '+s[1].textContent+'\n';
+  });
+  if(navigator.clipboard){navigator.clipboard.writeText(text).then(function(){toast('Result copied! 📋');});}
+}
+function shareRes(title){
+  var text='All Calculator Master - '+title+'\nhttps://all-calculator-master.netlify.app';
+  if(navigator.share){navigator.share({title:'All Calculator Master',text:text});}
+  else{navigator.clipboard&&navigator.clipboard.writeText(text).then(function(){toast('Copied to share! 📤');});}
+}
+function shareApp(){
+  var text='Check out All Calculator Master — 10 Free Calculators!\nhttps://all-calculator-master.netlify.app';
+  if(navigator.share){navigator.share({title:'All Calculator Master',text:text,url:'https://all-calculator-master.netlify.app'});}
+  else{navigator.clipboard&&navigator.clipboard.writeText(text).then(function(){toast('Link copied! 🚀');});}
+}
+
+// ===== HISTORY =====
+function addHist(expr,val){
+  var item={expr:expr,val:val,time:new Date().toLocaleString('en-IN'),id:Date.now()};
+  hist.unshift(item);
+  if(hist.length>50)hist=hist.slice(0,50);
+  localStorage.setItem('ch',JSON.stringify(hist));
+}
+function renderHist(filter){
+  var list=document.getElementById('histlist');
+  if(!list)return;
+  var items=filter?hist.filter(function(h){return h.expr.includes(filter)||h.val.includes(filter);}):hist;
+  if(!items.length){list.innerHTML='<div style="text-align:center;color:var(--muted);padding:28px"><div style="font-size:36px;margin-bottom:8px">🕐</div><div style="font-weight:700">No history yet</div></div>';return;}
+  list.innerHTML=items.map(function(h){
+    return '<div class="hitem"><div><div class="hexpr">'+h.expr+'</div><div class="hval">= '+h.val+'</div><div class="htime">'+h.time+'</div></div><button class="hdel" onclick="delHist('+h.id+')">🗑️</button></div>';
+  }).join('');
+}
+function delHist(id){hist=hist.filter(function(h){return h.id!==id;});localStorage.setItem('ch',JSON.stringify(hist));renderHist();}
+function clearHist(){hist=[];localStorage.setItem('ch','[]');renderHist();toast('History cleared!');}
+function filterHist(q){renderHist(q);}
+
+// ===== FAVORITES =====
+function loadFavBtns(){
+  favs.forEach(function(f){
+    var btn=document.getElementById('fb-'+f.id);
+    if(btn)btn.textContent='❤️';
+  });
+}
+function togFav(id,name){
+  var idx=favs.findIndex(function(f){return f.id===id;});
+  if(idx>=0){
+    favs.splice(idx,1);
+    toast('Removed from favorites');
+    var btn=document.getElementById('fb-'+id);
+    if(btn)btn.textContent='🤍';
+  } else {
+    favs.push({id:id,name:name});
+    toast('Added to favorites ⭐');
+    var btn=document.getElementById('fb-'+id);
+    if(btn)btn.textContent='❤️';
+  }
+  localStorage.setItem('cf',JSON.stringify(favs));
+}
+var favIcons={'s-calc':'🔢','s-curr':'💱','s-emi':'🏦','s-pct':'📊','s-marks':'🎓','s-profit':'📈','s-kisan':'🌾','s-bmi':'❤️','s-age':'🎂'};
+function renderFavs(){
+  var grid=document.getElementById('favgrid');
+  var empty=document.getElementById('favempty');
+  if(!grid)return;
+  if(!favs.length){grid.innerHTML='';if(empty)empty.style.display='block';return;}
+  if(empty)empty.style.display='none';
+  grid.innerHTML=favs.map(function(f){
+    var ic=favIcons[f.id]||'🧮';
+    return '<div class="favcard" onclick="goFav(\''+f.id+'\')"><div class="favic">'+ic+'</div><div class="favname">'+f.name+'</div></div>';
+  }).join('');
+}
+function goFav(id){
+  goPage('home');
+  switchTab('basic');
+  var tabBtns=document.querySelectorAll('#st-basic .stab');
+  var secMap={'s-calc':0,'s-curr':1,'s-emi':2,'s-pct':3,'s-marks':4,'s-profit':5,'s-kisan':6,'s-bmi':7,'s-age':8};
+  var idx=secMap[id];
+  if(idx!==undefined&&tabBtns[idx]){
+    switchSec('basic',id,tabBtns[idx]);
+  }
+}
+
+// ===== AI ASSISTANT =====
+function aiQ(el){document.getElementById('aiinput').value=el.textContent;sendAI();}
+function sendAI(){
+  var input=document.getElementById('aiinput');
+  var q=input.value.trim();
+  if(!q)return;
+  var chat=document.getElementById('aichat');
+  chat.innerHTML+='<div class="aimsg u">'+q+'</div>';
+  input.value='';
+  chat.innerHTML+='<div class="aimsg b" id="ailoading">🤔 Thinking...</div>';
+  chat.scrollTop=chat.scrollHeight;
+  setTimeout(function(){
+    var loading=document.getElementById('ailoading');
+    if(loading)loading.remove();
+    var ans=solveAI(q);
+    chat.innerHTML+='<div class="aimsg b">'+ans+'</div>';
+    chat.scrollTop=chat.scrollHeight;
+  },600);
+}
+function solveAI(q){
+  var ql=q.toLowerCase();
+  var m;
+  // GST
+  m=ql.match(/(\d+(?:\.\d+)?)\s*(?:ka|of)?\s*(\d+(?:\.\d+)?)\s*%?\s*gst/i);
+  if(m){var v=+m[1],p=+m[2],r=v*p/100;return '💡 <b>GST Calculation:</b><br>Amount: ₹'+v+'<br>GST ('+p+'%): ₹'+r.toFixed(2)+'<br>Total: ₹'+(v+r).toFixed(2);}
+  // Salary hike
+  m=ql.match(/salary\s*(\d+)\s*.*?(\d+)\s*%\s*hike/i);
+  if(m){var sal=+m[1],pct=+m[2],hike=sal*pct/100;return '💡 <b>Salary Hike:</b><br>Current: ₹'+sal+'<br>Hike ('+pct+'%): ₹'+hike.toFixed(0)+'<br>New Salary: ₹'+(sal+hike).toFixed(0)+'/month';}
+  // EMI
+  m=ql.match(/(\d+(?:\.\d+)?)\s*(?:lakh|lac)?\s*.*?(\d+)\s*(?:year|yr|saal)/i);
+  if(m&&(ql.includes('emi')||ql.includes('loan'))){
+    var P=+m[1];if(ql.includes('lakh')||ql.includes('lac'))P*=100000;
+    var yrs=+m[2],n=yrs*12;
+    var rm=ql.match(/(\d+(?:\.\d+)?)\s*%/i);var rate=(rm?+rm[1]:8.5)/12/100;
+    var emi=P*rate*Math.pow(1+rate,n)/(Math.pow(1+rate,n)-1);
+    return '💡 <b>EMI Result:</b><br>Loan: ₹'+P.toLocaleString('en-IN')+'<br>Tenure: '+yrs+' years<br>Rate: '+(rm?rm[1]:'8.5')+'%<br><b>Monthly EMI: ₹'+Math.round(emi).toLocaleString('en-IN')+'</b><br>Total: ₹'+Math.round(emi*n).toLocaleString('en-IN')+'<br>Interest: ₹'+Math.round(emi*n-P).toLocaleString('en-IN');
+  }
+  // BMI
+  m=ql.match(/(\d+(?:\.\d+)?)\s*kg.*?(\d+(?:\.\d+)?)\s*cm/i);
+  if(m||ql.includes('bmi')){
+    if(!m)m=ql.match(/(\d+)\s+(\d+)/);
+    if(m){var w=+m[1],h=+m[2]/100,b=w/(h*h);var cat2=b<18.5?'Underweight':b<25?'Normal/Healthy':b<30?'Overweight':'Obese';return '💡 <b>BMI Result:</b><br>'+m[1]+'kg, '+m[2]+'cm<br><b>BMI: '+b.toFixed(1)+'</b><br>Category: '+cat2;}
+  }
+  // Marks
+  m=ql.match(/(\d+)\s*(?:out of|\/|of)\s*(\d+)/i);
+  if(m){var o=+m[1],t=+m[2],p2=(o/t)*100;var g2=p2>=90?'A+':p2>=80?'A':p2>=70?'B+':p2>=60?'B':p2>=50?'C':p2>=33?'D':'F';return '💡 <b>Marks:</b><br>'+o+' out of '+t+'<br><b>Percentage: '+p2.toFixed(2)+'%</b><br>Grade: '+g2+'<br>'+(p2>=33?'✅ PASS':'❌ FAIL');}
+  // Profit
+  m=ql.match(/(?:cp|cost)\s*(\d+).*?(?:sp|sell)\s*(\d+)/i);
+  if(m){var cp2=+m[1],sp2=+m[2],d2=sp2-cp2,pct2=(Math.abs(d2)/cp2)*100;return '💡 <b>Profit/Loss:</b><br>Cost: ₹'+cp2+', Sell: ₹'+sp2+'<br>'+(d2>=0?'Profit':'Loss')+': ₹'+Math.abs(d2)+' ('+pct2.toFixed(2)+'%)';}
+  // Simple math
+  try{var expr2=q.replace(/[^0-9+\-*/.()%\s]/g,'').trim();if(expr2){var res=Function('"use strict";return('+expr2+')')();if(!isNaN(res))return '💡 <b>Result:</b> '+res;}}catch(e){}
+  return '🤖 Try these examples:<br>• "25000 ka 18% GST"<br>• "EMI 500000 5 years 8.5%"<br>• "Salary 45000 10% hike"<br>• "450 out of 600"<br>• "BMI 70kg 175cm"<br>• "profit cp 1000 sp 1350"';
+}
+</script>
+</body>
+</html>
